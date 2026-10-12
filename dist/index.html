@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>EL ÚLTIMO SEGADOR — Crónicas de la Muerte</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--gold:#d8b45a;--pale:#e8e4d8;--blood:#8b1e2e;--void:#0b0b12;--ash:#1a1a26}
+html,body{background:var(--void);color:var(--pale);font-family:Georgia,'Times New Roman',serif;min-height:100%}
+body{background:radial-gradient(1200px 700px at 50% -10%,#23233a 0%,#0b0b12 60%) fixed}
+header{padding:28px 18px 14px;text-align:center}
+.eyebrow{letter-spacing:.35em;font-size:11px;color:var(--gold);text-transform:uppercase}
+h1{font-size:clamp(30px,6vw,58px);letter-spacing:.04em;margin:8px 0 4px;text-shadow:0 0 30px rgba(216,180,90,.35)}
+.sub{font-style:italic;opacity:.85;max-width:720px;margin:0 auto;font-size:15px;line-height:1.5}
+.anchors{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:14px 0}
+.anchors a{color:var(--gold);border:1px solid #4a3f22;border-radius:999px;padding:6px 14px;font-size:13px;text-decoration:none;background:rgba(216,180,90,.07)}
+main{max-width:1100px;margin:0 auto;padding:0 16px 40px}
+.hud{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:10px 0 12px}
+.pill{background:#14141f;border:1px solid #33334d;border-radius:12px;padding:8px 14px;font-size:14px;min-width:130px;text-align:center}
+.pill b{color:var(--gold)}
+#stageWrap{position:relative;border:1px solid #3a3a55;border-radius:16px;overflow:hidden;background:#06060c;box-shadow:0 20px 80px rgba(0,0,0,.6)}
+#game{display:block;width:100%;height:52vh;min-height:380px;touch-action:none;cursor:crosshair}
+#overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;background:rgba(6,6,12,.72);backdrop-filter:blur(3px);text-align:center;padding:20px}
+#overlay.hidden{display:none}
+#overlay h2{font-size:clamp(22px,4vw,38px);color:var(--gold)}
+#overlay p{max-width:560px;line-height:1.6;font-size:15px;opacity:.9}
+.btn{background:linear-gradient(180deg,#e8c96a,#b88a2e);color:#111;border:none;border-radius:12px;padding:12px 26px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 6px 24px rgba(216,180,90,.35)}
+.btn.ghost{background:transparent;color:var(--gold);border:1px solid var(--gold);box-shadow:none}
+.controls{display:flex;gap:10px;justify-content:center;margin:12px 0;flex-wrap:wrap}
+.controls button{background:#1c1c2b;color:var(--pale);border:1px solid #44445f;border-radius:12px;padding:12px 16px;font-size:14px;min-width:110px;touch-action:manipulation}
+.controls button:active{transform:scale(.97);background:#2a2a3f}
+#touchUI{display:none;justify-content:space-between;align-items:flex-end;padding:10px 12px 14px;gap:10px}
+#joy{width:124px;height:124px;border-radius:50%;border:1px solid #55556f;background:rgba(255,255,255,.04);position:relative;touch-action:none}
+#stick{position:absolute;left:50%;top:50%;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;background:radial-gradient(circle,#e8c96a,#7a5f1e)}
+.tbtns{display:flex;gap:8px}
+.tbtns button{width:64px;height:64px;border-radius:50%;border:1px solid var(--gold);background:rgba(216,180,90,.12);color:var(--gold);font-size:13px;font-weight:700}
+@media(pointer:coarse){#touchUI{display:flex}#game{height:46vh}}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:18px 0}
+.card{background:linear-gradient(180deg,#15151f,#0e0e16);border:1px solid #34344e;border-radius:14px;padding:14px}
+.card h3{color:var(--gold);font-size:16px;margin-bottom:6px}
+.card p{font-size:13.5px;line-height:1.55;opacity:.88}
+.card .era{font-size:11px;letter-spacing:.2em;color:#8f8fa8}
+section.lore{background:#101018;border:1px solid #2e2e46;border-radius:16px;padding:18px;margin-top:16px}
+section.lore h2{color:var(--gold);margin-bottom:8px}
+section.lore p{line-height:1.7;font-size:14.5px;opacity:.9;margin-bottom:10px}
+footer{text-align:center;padding:20px;opacity:.6;font-size:12px}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#1d1d2b;border:1px solid var(--gold);color:var(--pale);padding:10px 18px;border-radius:999px;font-size:14px;display:none;z-index:10}
+</style>
+</head>
+<body>
+<header>
+<div class="eyebrow">Crónicas de la Muerte a través del Tiempo</div>
+<h1>EL ÚLTIMO SEGADOR</h1>
+<p class="sub">«Todo lo que vive me pertenece algún día. Pero alguien ha decidido que ya nadie me pertenecerá.» — Hospital 2187, el día en que nadie murió.</p>
+<div class="anchors"><a href="#jugar">Jugar prototipo</a><a href="#eras">7 Eras / 12 Fisuras</a><a href="#historia">Historia</a></div>
+</header>
+<main>
+<div class="hud">
+<div class="pill">Arena <b id="hSand">0</b></div>
+<div class="pill">Almas libres <b id="hSouls">0</b>/12</div>
+<div class="pill">Fisura <b id="hWave">1 — Jade Eterno</b></div>
+<div class="pill">Vida <b id="hHp">100</b></div>
+<div class="pill">Pacto <b id="hPact">—</b></div>
+</div>
+<div id="stageWrap">
+<canvas id="game" width="960" height="540"></canvas>
+<div id="overlay">
+<h2 id="ovTitle">EL UMBRAL TE ESPERA</h2>
+<p id="ovText">Elena Valdés no puede partir. El Reloj Primordial está roto en 12 fragmentos. Cruza las Fisuras, libera almas, derrota Soberanos y enfrenta a Ilmar, el Relojero Hueco. Mueve con WASD / joystick, ataca con click / espacio, dash con Shift.</p>
+<button class="btn" id="playBtn">⚔ Entrar a la Fisura</button>
+<button class="btn ghost" id="loreBtn">Leer crónica</button>
+</div>
+<div id="touchUI">
+<div id="joy"><div id="stick"></div></div>
+<div class="tbtns"><button id="bAtk">⚔</button><button id="bDash">➤</button><button id="bTime">⏳</button></div>
+</div>
+</div>
+<div class="controls" id="jugar">
+<button id="cAtk">⚔ Guadaña Cronos [Espacio]</button>
+<button id="cDash">➤ Paso del Segador [Shift]</button>
+<button id="cTime">⏳ Guadaña del Tiempo [T]</button>
+<button id="cMask">👺 Máscara de Almas [M]</button>
+<button id="cEra">⟳ Cambiar Fisura [E]</button>
+</div>
+<div class="grid" id="eras"></div>
+<section class="lore" id="historia">
+<h2>Prólogo — El Gran Estancamiento (2187)</h2>
+<p>Nora sostiene la mano de su abuela Elena (101 años) y susurra «no te vayas todavía». La Muerte corta el hilo plateado con Cronos, pero el hilo se reteje. Miles de millones de latidos que no se detienen. Los hospitales se desbordan: nadie mejora, nadie parte. Es el Gran Estancamiento.</p>
+<p>En el Umbral, el Reloj de Arena Primordial aparece quebrado en doce fragmentos. En cada espejo: un emperador de jade, una ciudad en llamas, un jinete en la estepa, un castillo de sangre. Detrás, un susurro: «Ya nadie tendrá que irse». Es Ilmar — el primer humano que la Muerte recogió, el niño de la cueva helada que pidió «un día más» y nunca se fue.</p>
+<h2>Cómo se juega este prototipo (Phone / Tablet / PC)</h2>
+<p>Este es el vertical slice: el Umbral + Fisura 1. Libera 12 almas atrapadas en bucle para abrir la puerta del Soberano. Los Ecos menores te persiguen; la guadaña los siega en arco. El Paso del Segador te vuelve ceniza invulnerable. La Guadaña del Tiempo ralentiza el mundo 3s. La Máscara adopta el poder del último Eco absorbido. Cada Fisura cambia de paleta y Soberano.</p>
+</section>
+</main>
+<div id="toast"></div>
+<footer>Prototipo jugable canvas 2D — sin dependencias externas · 7 actos · 12 Fisuras · 3 finales: Implacable / Piadosa / Liberación</footer>
+<script>
+(function(){
+const cv=document.getElementById('game'),ctx=cv.getContext('2d');
+const ERAS=[
+{n:'1 — Jade Eterno',c1:'#0f3d2e',c2:'#0a1f18',boss:'Primer Emperador Eco',foil:'#d8b45a'},
+{n:'2 — Ciudad en Llamas',c1:'#4a1410',c2:'#1a0806',boss:'Cónsul Incendiado',foil:'#ff7a3c'},
+{n:'3 — Estepa Sin Fin',c1:'#2a3d0f',c2:'#101a06',boss:'Khan Eterno',foil:'#9dff57'},
+{n:'4 — Castillo de Sangre',c1:'#3d0f1e',c2:'#1a060d',boss:'Voivoda Sanguino',foil:'#ff2e5a'},
+{n:'5 — Imperio de Pólvora',c1:'#3d2f0f',c2:'#1a1406',boss:'Almirante de Niebla',foil:'#7ad8ff'},
+{n:'6 — Fábrica del Siglo',c1:'#2a2a33',c2:'#0c0c12',boss:'General de Acero',foil:'#c8c8d8'},
+{n:'7 — Eternidad Congelada',c1:'#0f2f3d',c2:'#060f14',boss:'Ilmar, Relojero Hueco',foil:'#aefcff'}];
+let eraIdx=0,playing=false,slowmo=0,maskT=0,maskName='—';
+let sand=0,souls=0,hp=100,invuln=0,atkCd=0,dashCd=0,timeCd=0,slashes=[];
+const P={x:480,y:300,r:16,vx:0,vy:0,face:0,dash:0};
+let enemies=[],orbs=[],msgs=[];
+function toast(t){const e=document.getElementById('toast');e.textContent=t;e.style.display='block';clearTimeout(e._t);e._t=setTimeout(()=>e.style.display='none',2200);}
+function spawnWave(n){enemies=[];for(let i=0;i<4+n*2;i++){const a=Math.random()*6.28,r=180+Math.random()*220;enemies.push({x:480+Math.cos(a)*r,y:270+Math.sin(a)*r*0.6,r:11+Math.random()*5,hp:2+Math.floor(n/2),sp:0.6+Math.random()*0.8+eraIdx*0.12,t:Math.random()*10,boss:false});}
+if(n>=2){enemies.push({x:480,y:110,r:26,hp:22+n*6,sp:0.7,boss:true,name:ERAS[eraIdx].boss,t:0});}}
+function freeSoulsInit(){orbs=[];for(let i=0;i<12;i++){orbs.push({x:80+Math.random()*800,y:80+Math.random()*380,r:9,taken:false,ph:Math.random()*6});}}
+function start(){playing=true;document.getElementById('overlay').classList.add('hidden');eraIdx=0;resetEra();toast('Fisura abierta: Jade Eterno');}
+function resetEra(){hp=100;souls=0;P.x=480;P.y=300;freeSoulsInit();spawnWave(eraIdx+1);updHud();}
+function updHud(){document.getElementById('hSand').textContent=sand;document.getElementById('hSouls').textContent=souls;document.getElementById('hWave').textContent=ERAS[eraIdx].n;document.getElementById('hHp').textContent=Math.max(0,Math.ceil(hp));document.getElementById('hPact').textContent=maskName;}
+const keys={};addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.key===' '){e.preventDefault();attack();}if(e.key==='Shift')dash();if(e.key.toLowerCase()==='t')timeSlow();if(e.key.toLowerCase()==='m')mask();if(e.key.toLowerCase()==='e')nextEra();});
+addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+function attack(){if(!playing||atkCd>0)return;atkCd=0.28;slashes.push({a:P.face,t:0.18});for(const en of enemies){const dx=en.x-P.x,dy=en.y-P.y,d=Math.hypot(dx,dy);let da=Math.atan2(dy,dx)-P.face;da=Math.atan2(Math.sin(da),Math.cos(da));if(d<110&&Math.abs(da)<1.0){en.hp-=maskT>0?3:2;en.vx=(dx/d||0)*260;en.vy=(dy/d||0)*260;sand+=3;if(en.hp<=0&&!en.dead){en.dead=true;sand+=20;maskName=en.boss?ERAS[eraIdx].boss:'Eco guerrero';toast(en.boss?'SOBERANO CAÍDO: +fragmento del Reloj':'Eco absorbido — Máscara lista [M]');}}}updHud();}
+function dash(){if(!playing||dashCd>0)return;dashCd=1.1;P.dash=0.18;invuln=Math.max(invuln,0.3);P.vx=Math.cos(P.face)*620;P.vy=Math.sin(P.face)*620;}
+function timeSlow(){if(!playing||timeCd>0)return;timeCd=9;slowmo=3;toast('⏳ Tiempo ralentizado');}
+function mask(){if(maskT>0||maskName==='—')return;maskT=6;toast('👺 Máscara: '+maskName);}
+function nextEra(){eraIdx=(eraIdx+1)%7;resetEra();toast('Fisura: '+ERAS[eraIdx].n+' — Soberano: '+ERAS[eraIdx].boss);}
+document.getElementById('cAtk').onclick=attack;document.getElementById('cDash').onclick=dash;document.getElementById('cTime').onclick=timeSlow;document.getElementById('cMask').onclick=mask;document.getElementById('cEra').onclick=nextEra;
+document.getElementById('bAtk').ontouchstart=e=>{e.preventDefault();attack();};document.getElementById('bDash').ontouchstart=e=>{e.preventDefault();dash();};document.getElementById('bTime').ontouchstart=e=>{e.preventDefault();timeSlow();};
+document.getElementById('playBtn').onclick=start;
+document.getElementById('loreBtn').onclick=()=>{document.getElementById('historia').scrollIntoView({behavior:'smooth'});};
+cv.addEventListener('pointerdown',e=>{const r=cv.getBoundingClientRect();P.face=Math.atan2((e.clientY-r.top)/r.height*540-P.y,(e.clientX-r.left)/r.width*960-P.x);attack();});
+// joystick
+const joy=document.getElementById('joy'),stick=document.getElementById('stick');let jid=null,jdx=0,jdy=0;
+joy.addEventListener('touchstart',e=>{jid=e.changedTouches[0].identifier;},{passive:true});
+addEventListener('touchmove',e=>{for(const t of e.changedTouches){if(t.identifier===jid){const r=joy.getBoundingClientRect();let dx=t.clientX-(r.left+r.width/2),dy=t.clientY-(r.top+r.height/2);const m=Math.hypot(dx,dy)||1,cl=Math.min(m,44);dx=dx/m*cl;dy=dy/m*cl;stick.style.transform=`translate(${dx}px,${dy}px)`;jdx=dx/44;jdy=dy/44;}}},{passive:true});
+addEventListener('touchend',e=>{for(const t of e.changedTouches){if(t.identifier===jid){jid=null;jdx=jdy=0;stick.style.transform='translate(0,0)';}}});
+// eras cards
+const eg=document.getElementById('eras');ERAS.forEach((er,i)=>{const d=document.createElement('div');d.className='card';d.innerHTML=`<div class="era">FISURA ${i+1}</div><h3>${er.n}</h3><p>Soberano: <b>${er.boss}</b><br>Explora el bucle, libera almas y recupera el fragmento ${i+1}/12 del Reloj Primordial.</p>`;eg.appendChild(d);});
+let last=performance.now();
+function loop(now){const dt=Math.min(0.033,(now-last)/1000);last=now;update(dt);draw(now/1000);requestAnimationFrame(loop);}
+function update(dt){if(atkCd>0)atkCd-=dt;if(dashCd>0)dashCd-=dt;if(timeCd>0)timeCd-=dt;if(invuln>0)invuln-=dt;if(maskT>0)maskT-=dt;if(slowmo>0)slowmo-=dt;
+const sdt=slowmo>0?dt*0.3:dt;
+if(playing){let mx=(keys['d']||keys['arrowright']?1:0)-(keys['a']||keys['arrowleft']?1:0)+jdx;let my=(keys['s']||keys['arrowdown']?1:0)-(keys['w']||keys['arrowup']?1:0)+jdy;
+if(P.dash>0){P.dash-=dt;}else{P.vx*=0.86;P.vy*=0.86;P.vx+=mx*1400*dt;P.vy+=my*1400*dt;const sp=Math.hypot(P.vx,P.vy),mx2=340;if(sp>mx2){P.vx*=mx2/sp;P.vy*=mx2/sp;}}
+P.x=Math.max(24,Math.min(936,P.x+P.vx*dt));P.y=Math.max(24,Math.min(516,P.y+P.vy*dt));
+if(Math.hypot(mx,my)>0.15&&P.dash<=0)P.face=Math.atan2(my,mx);
+for(const o of orbs){o.ph+=dt*3;if(!o.taken&&Math.hypot(o.x-P.x,o.y-P.y)<26){o.taken=true;souls++;sand+=15;toast(`Alma liberada (${souls}/12) +15 arena`);if(souls>=12)toast('¡Puerta del Soberano abierta!');updHud();}}
+for(const en of enemies){if(en.dead)continue;en.t+=sdt;const dx=P.x-en.x,dy=P.y-en.y,d=Math.hypot(dx,dy)||1;en.x+=(dx/d)*en.sp*60*sdt+(en.vx||0)*sdt;en.y+=(dy/d)*en.sp*60*sdt+(en.vy||0)*sdt;en.vx=(en.vx||0)*0.9;en.vy=(en.vy||0)*0.9;
+if(d<en.r+P.r&&invuln<=0){hp-=en.boss?14*dt*3:8*dt*3;if(hp<=0){hp=100;sand=Math.max(0,sand-30);toast('La Muerte no muere: regresas al Umbral');resetEra();}updHud();}}
+enemies=enemies.filter(e=>!e.dead||e.boss&&false);
+if(enemies.filter(e=>!e.dead).length===0){if(souls<12){spawnWave(1);}else{toast('FISURA PURIFICADA — [E] siguiente era');sand+=100;updHud();spawnWave(eraIdx+1);}}}
+slashes=slashes.filter(s=>(s.t-=dt)>0);
+}
+function draw(t){const E=ERAS[eraIdx];const g=ctx.createLinearGradient(0,0,0,540);g.addColorStop(0,E.c1);g.addColorStop(1,E.c2);ctx.fillStyle=g;ctx.fillRect(0,0,960,540);
+// arena particles
+ctx.save();for(let i=0;i<70;i++){const x=(i*137+t*12)%960,y=(i*89+t*7)%540;ctx.globalAlpha=0.25;ctx.fillStyle='#d8b45a';ctx.fillRect(x,y,2,2);}ctx.restore();ctx.globalAlpha=1;
+// hourglass center
+ctx.save();ctx.translate(480,270);ctx.strokeStyle=E.foil;ctx.globalAlpha=0.35;ctx.beginPath();ctx.arc(0,0,70+Math.sin(t)*6,0,6.29);ctx.stroke();ctx.restore();
+// orbs
+for(const o of orbs){if(o.taken)continue;ctx.save();ctx.translate(o.x,o.y+Math.sin(o.ph)*4);ctx.shadowBlur=14;ctx.shadowColor=E.foil;ctx.fillStyle='#fff8dc';ctx.beginPath();ctx.arc(0,0,o.r*0.55,0,6.29);ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle=E.foil;ctx.beginPath();ctx.arc(0,0,o.r,0,6.29);ctx.stroke();ctx.restore();}
+// enemies
+for(const en of enemies){if(en.dead)continue;ctx.save();ctx.translate(en.x,en.y);const w=Math.sin(en.t*6)*2;ctx.fillStyle=en.boss?'#2a0a12':'#1e1e2e';ctx.strokeStyle=en.boss?E.foil:'#7a7a9a';ctx.lineWidth=en.boss?3:1.5;ctx.beginPath();ctx.arc(0,w*0.3,en.r,0,6.29);ctx.fill();ctx.stroke();
+// eyes
+ctx.fillStyle=en.boss?'#ff2e5a':'#ff7a3c';ctx.beginPath();ctx.arc(-5,-3,2.4,0,6.29);ctx.arc(5,-3,2.4,0,6.29);ctx.fill();
+if(en.boss){ctx.fillStyle=E.foil;ctx.font='11px Georgia';ctx.textAlign='center';ctx.fillText(en.name||E.boss,0,-en.r-10);}ctx.restore();}
+// player reaper
+ctx.save();ctx.translate(P.x,P.y);ctx.rotate(P.face);
+if(P.dash>0){ctx.globalAlpha=0.5;}
+ctx.fillStyle='#0a0a12';ctx.strokeStyle=maskT>0?'#9dff57':'#d8b45a';ctx.lineWidth=2;
+ctx.beginPath();ctx.arc(0,0,P.r,0,6.29);ctx.fill();ctx.stroke();
+// hood + scythe
+ctx.strokeStyle='#e8e4d8';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(6,0);ctx.lineTo(44,-14);ctx.stroke();
+ctx.fillStyle='#e8e4d8';ctx.beginPath();ctx.arc(0,0,5,0,6.29);ctx.fill();
+ctx.fillStyle='#0a0a12';ctx.beginPath();ctx.arc(2,0,2,0,6.29);ctx.fill();
+for(const s of slashes){ctx.save();ctx.rotate(0);ctx.globalAlpha=s.t/0.18;ctx.strokeStyle='#fff2b0';ctx.lineWidth=4;ctx.beginPath();ctx.arc(0,0,70,s.a-1.0,s.a+1.0);ctx.stroke();ctx.restore();}
+ctx.restore();
+if(slowmo>0){ctx.fillStyle='rgba(122,216,255,.08)';ctx.fillRect(0,0,960,540);ctx.fillStyle='#7ad8ff';ctx.font='14px Georgia';ctx.fillText('⏳ '+slowmo.toFixed(1)+'s',20,30);}
+if(maskT>0){ctx.fillStyle='#9dff57';ctx.font='14px Georgia';ctx.fillText('👺 '+maskName+' '+maskT.toFixed(0)+'s',20,50);}
+if(!playing){/* overlay covers */}}
+// fit canvas backing store to element for sharpness
+function fit(){const r=cv.getBoundingClientRect();cv.width=960;cv.height=540;}
+addEventListener('resize',fit);fit();updHud();freeSoulsInit();spawnWave(1);requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
