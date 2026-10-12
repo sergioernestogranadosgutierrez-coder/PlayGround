@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0a0e1a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>🤖 TODO-BOT 3D — Arena Móvil</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+</script>
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<!-- HUD superior -->
+<header id="hud">
+  <div class="stat"><span class="label">PUNTOS</span><span id="score">0</span></div>
+  <div class="stat"><span class="label">NIVEL</span><span id="level">1</span></div>
+  <div class="stat"><span class="label">VIDAS</span><span id="lives">❤❤❤</span></div>
+  <div class="stat"><span class="label">RÉCORD</span><span id="best">0</span></div>
+</header>
+
+<!-- Panel del BOT -->
+<div id="bot-panel">
+  <button id="bot-toggle" class="bot-on" aria-pressed="true">🤖 BOT: ON</button>
+  <div id="bot-state">Estado: <b id="bot-state-text">BUSCANDO ORBE</b></div>
+</div>
+<div id="bot-vision-tag">🎯 objetivo del bot</div>
+
+<!-- Combo -->
+<div id="combo" class="hidden">¡COMBO x2!</div>
+<div id="toast" class="hidden"></div>
+
+<!-- Controles táctiles -->
+<div id="touch-ui">
+  <div id="joystick"><div id="stick"></div></div>
+  <div id="touch-buttons">
+    <button id="btn-dash" class="tbtn">⚡<small>DASH</small></button>
+    <button id="btn-pause" class="tbtn small">⏸<small>PAUSA</small></button>
+  </div>
+</div>
+
+<!-- Menú principal -->
+<div id="menu" class="overlay">
+  <div class="card">
+    <h1>🤖 TODO-BOT <span>3D</span></h1>
+    <p class="sub">El bot que <b>juega todo por ti</b> · Arena 3D para móvil y tablet</p>
+    <ul class="features">
+      <li>🕹️ Joystick táctil + dash</li>
+      <li>🤖 Autopiloto: recoge, esquiva y sube de nivel solo</li>
+      <li>📱 Retrato y horizontal · 1 dedo basta</li>
+    </ul>
+    <button id="btn-play-bot" class="primary">▶ VER AL BOT JUGAR</button>
+    <button id="btn-play-me" class="ghost">🎮 JUGAR YO</button>
+    <p class="hint">WASD / flechas en PC · Joystick en móvil</p>
+  </div>
+</div>
+
+<!-- Pausa -->
+<div id="pause-menu" class="overlay hidden">
+  <div class="card">
+    <h2>⏸ Pausa</h2>
+    <button id="btn-resume" class="primary">Continuar</button>
+    <button id="btn-restart" class="ghost">Reiniciar</button>
+    <button id="btn-quit" class="ghost">Menú</button>
+  </div>
+</div>
+
+<!-- Game over -->
+<div id="gameover" class="overlay hidden">
+  <div class="card">
+    <h2>💥 Fin del juego</h2>
+    <p id="final-score">Puntos: 0</p>
+    <p id="final-best">Récord: 0</p>
+    <p id="auto-restart-note" class="hidden">🤖 El bot reinicia solo en <b id="auto-count">3</b>…</p>
+    <button id="btn-again" class="primary">Jugar otra vez</button>
+    <button id="btn-menu2" class="ghost">Menú</button>
+  </div>
+</div>
+
+<div id="loading">Cargando 3D…</div>
+
+<script type="module" src="game.js"></script>
+</body>
+</html>
