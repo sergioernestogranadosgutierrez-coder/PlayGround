@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TerraForge — ficha de servidor | ServerGratis · Musu</title>
+<meta name="description" content="Ficha del servidor público TerraForge: IPs Java y Bedrock, estado en vivo, modos de juego y cómo unirse.">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+  <a class="logo" href="index.html">🎮 Server<span>Gratis</span> <small>Musu</small></a>
+  <nav class="topnav"><a href="index.html#estado">← Volver a servidores</a></nav>
+  <div class="top-actions"><button id="themeBtn" class="btn ghost small">🌙</button></div>
+</div></header>
+
+<main>
+<section class="hero"><div class="hero-inner">
+  <p class="badge">🌍 Servidor público · No oficial · Ficha informativa</p>
+  <h1>TerraForge</h1>
+  <p class="subtitle">Supervivencia con towns, economía entre jugadores y soporte Java + Bedrock en el mismo mundo.</p>
+  <div class="meta" style="justify-content:center;display:flex;gap:6px;flex-wrap:wrap">
+    <span class="tag">Survival</span><span class="tag">Towny</span><span class="tag">Lifesteal</span>
+    <span class="tag">PvE</span><span class="tag">Economía</span><span class="tag">Crossplay</span>
+  </div>
+</div></section>
+
+<section class="section">
+  <div class="grid">
+    <div class="card">
+      <h3><span class="dot" id="tfDot"></span>Estado en vivo</h3>
+      <p id="tfStatus" class="muted">Comprobando…</p>
+      <p class="muted small">Fuente: ping público (mcsrvstat.us). Si sale offline, el servidor está apagado o bloquea el ping.</p>
+      <button class="btn small" id="tfRetry">🔄 Recomprobar</button>
+    </div>
+    <div class="card">
+      <h3>🖥️ IP Java</h3>
+      <p><code id="tfJava">TerraForge.Aquatis.io</code></p>
+      <button class="btn primary small" data-copy="TerraForge.Aquatis.io">📋 Copiar IP Java</button>
+    </div>
+    <div class="card">
+      <h3>📱 IP Bedrock</h3>
+      <p><code>TerraForge.Aquatis.io:25593</code></p>
+      <p class="muted small">Puerto Bedrock: <code>19132</code> (según la ficha pública del servidor)</p>
+      <button class="btn primary small" data-copy="TerraForge.Aquatis.io:25593">📋 Copiar IP Bedrock</button>
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <h2>▶️ Cómo unirse</h2>
+  <div class="grid">
+    <div class="card"><h3>Java (PC)</h3><ol>
+      <li>Abre Minecraft Java (versión 1.21).</li>
+      <li>Multijugador → Añadir servidor.</li>
+      <li>Pega <code>TerraForge.Aquatis.io</code> y guarda.</li>
+      <li>Doble clic para entrar.</li>
+    </ol></div>
+    <div class="card"><h3>Bedrock (móvil/consola)</h3><ol>
+      <li>Abre Minecraft → Jugar → Servidores → Añadir.</li>
+      <li>Dirección: <code>TerraForge.Aquatis.io</code>, puerto <code>25593</code>.</li>
+      <li>Guarda y únete.</li>
+    </ol></div>
+    <div class="card"><h3>💡 Qué ofrece</h3><ul>
+      <li>Reclama terreno y funda towns con tu gente.</li>
+      <li>Economía entre jugadores, sin tiendas de admin.</li>
+      <li>Jefes y equipo personalizado.</li>
+      <li>Mismo mundo para Java y Bedrock.</li>
+    </ul></div>
+  </div>
+</section>
+
+<section class="section">
+  <h2>❓ Preguntas rápidas</h2>
+  <div class="card">
+    <details open><summary>¿Esta página es oficial de TerraForge?</summary><p>No. Es una ficha informativa hecha por ServerGratis · Musu. El servidor pertenece a sus dueños (discord del proyecto: busca su Discord oficial).</p></details>
+    <details><summary>¿Por qué a veces sale offline?</summary><p>O el servidor está apagado/migrando, o bloquea los pings externos. Prueba más tarde o entra a su Discord.</p></details>
+    <details><summary>¿Necesito cuenta premium?</summary><p>Revisa su ficha oficial: la mayoría de estos networks piden Java original. Bedrock usa tu cuenta Microsoft.</p></details>
+  </div>
+  <p style="margin-top:14px"><a class="btn ghost" href="index.html#estado">← Volver a la lista de servidores</a></p>
+</section>
+</main>
+
+<footer><p>🎮 <strong>ServerGratis · Musu</strong> — ficha no oficial, sin afiliación con TerraForge ni Mojang.</p></footer>
+<div id="toast" role="status"></div>
+<script>
+const $=s=>document.querySelector(s);
+$("#themeBtn").onclick=()=>{const h=document.documentElement;h.dataset.theme=h.dataset.theme==="dark"?"light":"dark";};
+function toast(m){const t=$("#toast");t.textContent=m;t.style.display="block";setTimeout(()=>t.style.display="none",2200);}
+document.addEventListener("click",e=>{const c=e.target.closest("[data-copy]");if(!c)return;(navigator.clipboard?navigator.clipboard.writeText(c.dataset.copy):Promise.reject()).then(()=>toast("Copiado ✅")).catch(()=>toast("Copia manual: "+c.dataset.copy));});
+async function checkTF(){
+  const box=$("#tfStatus"),dot=$("#tfDot");box.textContent="Comprobando…";
+  try{
+    const r=await fetch("https://api.mcsrvstat.us/3/TerraForge.Aquatis.io",{cache:"no-store"});
+    const d=await r.json();
+    if(d.online===true){dot.className="dot on";box.innerHTML=`🟢 En línea · 👥 <strong>${d.players?.online??"?"}</strong>${d.players?.max?" / "+d.players.max:""} · ${d.version||""}`;}
+    else{dot.className="dot off";box.textContent="🔴 Offline ahora mismo (no responde al ping).";}
+  }catch{dot.className="dot off";box.textContent="🔴 No se pudo comprobar.";}
+}
+$("#tfRetry").onclick=checkTF;checkTF();
+</script>
+</body>
+</html>

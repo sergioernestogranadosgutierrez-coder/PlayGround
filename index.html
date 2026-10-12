@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ServerGratis · Musu — Crea tu servidor gratis en minutos</title>
+<meta name="description" content="Guía para montar tu propio servidor gratis para cualquier juego, sin saber informática.">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+</head>
+<body>
+<header class="topbar" id="topbar">
+  <div class="topbar-inner">
+    <a class="logo" href="#inicio">🎮 Server<span>Gratis</span> <small>Musu</small></a>
+    <div class="search-wrap">
+      <input id="globalSearch" type="search" placeholder="Buscar juegos, guías, hosting…" aria-label="Buscar">
+    </div>
+    <nav class="topnav">
+      <a href="#catalogo" data-i18n="nav.games">Juegos</a>
+      <a href="#hosting" data-i18n="nav.hosting">Alojamiento</a>
+      <a href="#conexion" data-i18n="nav.net">Conexión</a>
+      <a href="#asistente" data-i18n="nav.wizard">Asistente</a>
+      <a href="#generador" data-i18n="nav.gen">Generador</a>
+    </nav>
+    <div class="top-actions">
+      <button id="langBtn" class="btn ghost small" title="Idioma">ES / EN</button>
+      <button id="themeBtn" class="btn ghost small" title="Modo claro/oscuro">🌙</button>
+      <button id="favBtn" class="btn ghost small" title="Favoritos">⭐ <span id="favCount">0</span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- 1. INICIO -->
+<section id="inicio" class="hero">
+  <div class="hero-inner">
+    <p class="badge">✨ 100% gratis · Sin saber informática · En español</p>
+    <h1 data-i18n="hero.title">Crea tu servidor gratis en minutos</h1>
+    <p class="subtitle" data-i18n="hero.sub">Te guiamos paso a paso para jugar con tus amigos en Terraria, Minecraft, Valheim, Stardew Valley y más. Sin abrir puertos, sin pagar nada.</p>
+    <div class="hero-search">
+      <input id="heroSearch" type="search" placeholder="🔎 Escribe tu juego: Minecraft, Terraria, Valheim…" aria-label="Buscador de juegos">
+      <div id="heroResults" class="hero-results"></div>
+    </div>
+    <div class="hero-cta">
+      <a href="#catalogo" class="btn primary big" data-i18n="hero.cta1">Elegir juego</a>
+      <a href="#como" class="btn ghost big" data-i18n="hero.cta2">Cómo funciona</a>
+    </div>
+    <div id="como" class="steps">
+      <div class="step"><div class="step-n">1</div><h3 data-i18n="s1t">Elige juego</h3><p data-i18n="s1d">Busca tu juego en el catálogo y abre su guía paso a paso.</p></div>
+      <div class="step"><div class="step-n">2</div><h3 data-i18n="s2t">Elige dónde alojarlo</h3><p data-i18n="s2d">Tu PC, Oracle Cloud, Google Cloud… compara gratis y 24/7.</p></div>
+      <div class="step"><div class="step-n">3</div><h3 data-i18n="s3t">Conecta a tus amigos</h3><p data-i18n="s3d">Con Playit.gg o Tailscale, sin abrir puertos del router.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. CATÁLOGO -->
+<section id="catalogo" class="section">
+  <h2>🎲 <span data-i18n="cat.title">Catálogo de juegos</span></h2>
+  <p class="muted" data-i18n="cat.sub">Cada tarjeta lleva a su guía completa. Guarda favoritos con ⭐.</p>
+  <div class="filters">
+    <button class="chip active" data-filter="all">Todos</button>
+    <button class="chip" data-filter="cooperativo">🤝 Cooperativo</button>
+    <button class="chip" data-filter="supervivencia">🌲 Supervivencia</button>
+    <button class="chip" data-filter="mods">🧩 Con mods</button>
+    <button class="chip" data-filter="24/7">⚡ Gratis 24/7</button>
+    <select id="diffFilter" aria-label="Dificultad">
+      <option value="all">Dificultad: todas</option>
+      <option value="fácil">Fácil</option>
+      <option value="media">Media</option>
+      <option value="difícil">Difícil</option>
+    </select>
+  </div>
+  <div id="gameGrid" class="grid"></div>
+</section>
+
+<!-- 3. GUÍA -->
+<section id="guia" class="section alt">
+  <h2>📖 <span data-i18n="guide.title">Guía paso a paso</span></h2>
+  <p class="muted">Plantilla única para todos los juegos. Elige un juego del catálogo:</p>
+  <div class="guide-picker" id="guidePicker"></div>
+  <article id="guideContent" class="guide-card">
+    <p class="muted">Selecciona un juego para ver requisitos, descarga, pasos, configuración y errores comunes.</p>
+  </article>
+</section>
+
+<!-- 4. HOSTING -->
+<section id="hosting" class="section">
+  <h2>🖥️ Opciones de alojamiento gratis</h2>
+  <div class="table-wrap"><table id="hostTable">
+    <thead><tr><th>Opción</th><th>Precio</th><th>Ventajas</th><th>Límites</th><th>Ideal para</th></tr></thead>
+    <tbody>
+      <tr><td><strong>💻 Tu PC</strong></td><td>Gratis</td><td>Fácil, control total, sin registro</td><td>Debe estar encendida · tu IP cambia · sube la luz</td><td>Probar hoy mismo, 2–6 amigos</td></tr>
+      <tr><td><strong>☁️ Oracle Cloud Always Free</strong></td><td>Gratis (pide tarjeta para verificar, no cobra)</td><td>24/7 · 4 CPU ARM + 24 GB RAM gratis</td><td>Requiere tarjeta · registro técnico · puede agotar capacidad por región</td><td>Servidor 24/7 serio, 10+ jugadores</td></tr>
+      <tr><td><strong>🌐 Google Cloud e2-micro</strong></td><td>Gratis (cuota mensual)</td><td>24/7 para pocos jugadores · sin tarjeta en prueba</td><td>Solo 1 GB RAM · 1 vCPU · se queda corto con mods</td><td>Terraria / Stardew con 2–4 amigos</td></tr>
+      <tr><td><strong>🆓 Aternos / FalixNodes</strong></td><td>Gratis con cola</td><td>Cero configuración · panel web</td><td>Cola de espera · se apaga sin jugadores · poca RAM</td><td>Minecraft rápido sin complicaciones</td></tr>
+    </tbody>
+  </table></div>
+  <details class="tutorial"><summary><strong>Tutorial: Tu PC (5 min)</strong></summary><ol><li>Descarga el servidor oficial (ver guía del juego).</li><li>Abre la carpeta y ejecuta el .jar / .exe / .x86_64.</li><li>No abras puertos: instala <strong>Playit.gg</strong> y comparte el enlace con tus amigos.</li></ol><button class="btn small" data-copy="winget install Playit.Playit">Copiar comando Playit</button></details>
+  <details class="tutorial"><summary><strong>Tutorial: Oracle Cloud Always Free</strong></summary><ol><li>Crea cuenta en oracle.com/cloud/free con tarjeta (solo verificación).</li><li>Crea instancia Ampere A1: 4 OCPU, 24 GB RAM, Ubuntu 22.04.</li><li>Abre puertos en el firewall: <code>sudo iptables -I INPUT -p tcp --dport 25565 -j ACCEPT</code></li><li>Instala Java / SteamCMD según el juego y lanza el servidor con <code>tmux</code> o <code>systemd</code>.</li></ol><button class="btn small" data-copy="sudo apt update && sudo apt install openjdk-21-jre tmux -y">Copiar comando base</button></details>
+  <details class="tutorial"><summary><strong>Tutorial: Google Cloud e2-micro</strong></summary><ol><li>Activa la capa gratuita en console.cloud.google.com.</li><li>Crea VM e2-micro (us-central1), Ubuntu 22.04, 30 GB disco.</li><li>Marca “Permitir tráfico HTTP/HTTPS” y añade regla de firewall para el puerto del juego.</li><li>Sube los archivos por SSH y ejecuta el servidor.</li></ol></details>
+</section>
+
+<!-- 5. CONEXIÓN -->
+<section id="conexion" class="section alt">
+  <h2>🔌 Conexión sin abrir puertos</h2>
+  <p class="muted">El router bloquea conexiones entrantes. Estas herramientas crean un túnel seguro sin tocar el router.</p>
+  <div class="grid" id="netGrid">
+    <div class="card"><h3>🚀 Playit.gg</h3><p><strong>Lo más fácil.</strong> Instalas, te da una dirección pública. Ideal para Minecraft, Terraria, Valheim.</p><ol><li>Regístrate en playit.gg</li><li>Instala el programa y añade un túnel TCP/UDP al puerto de tu juego.</li><li>Comparte la dirección <code>xxx.playit.gg:port</code></li></ol><button class="btn small" data-copy="https://playit.gg/download">Copiar enlace descarga</button></div>
+    <div class="card"><h3>🛡️ Tailscale</h3><p><strong>Red privada.</strong> Todos instalan Tailscale y juegan como si estuvieran en LAN. Ideal para Stardew Valley y juegos sin servidor dedicado.</p><ol><li>Instala Tailscale en tu PC y en la de cada amigo.</li><li>Inicia sesión con la misma red (o comparte invitaciones).</li><li>Conéctate a la IP Tailscale del anfitrión (100.x.y.z).</li></ol></div>
+    <div class="card"><h3>🌐 ZeroTier</h3><p>Como Tailscale pero open-source. Bien para Valheim y Factorio con amigos técnicos.</p><ol><li>Crea red en my.zerotier.com, instala cliente en cada PC y únete con el ID de red.</li></ol></div>
+    <div class="card"><h3>🎮 Radmin VPN</h3><p>El clásico estilo Hamachi. Solo Windows, muy simple para Terraria y Minecraft LAN.</p><ol><li>Instala Radmin VPN, crea red con nombre y contraseña, tus amigos se unen.</li></ol></div>
+  </div>
+  <div class="tip">💡 <strong>¿Cuál conviene?</strong> Minecraft/Terraria públicos → <strong>Playit.gg</strong>. Stardew/coop privado → <strong>Tailscale</strong>. Solo Windows y prisa → <strong>Radmin</strong>.</div>
+</section>
+
+<!-- 6. ASISTENTE -->
+<section id="asistente" class="section">
+  <h2>🧭 Asistente: ¿Cuál me conviene?</h2>
+  <div class="wizard card">
+    <label>Juego <select id="wGame"><option>Minecraft</option><option>Terraria</option><option>Stardew Valley</option><option>Valheim</option><option>Factorio</option><option>Project Zomboid</option></select></label>
+    <label>Nº de amigos <input id="wFriends" type="number" min="1" max="100" value="3"></label>
+    <label class="check"><input id="w247" type="checkbox"> Quiero 24/7 (siempre encendido)</label>
+    <label class="check"><input id="wPC" type="checkbox" checked> Tengo PC potente para dejar encendida</label>
+    <button class="btn primary" id="wGo">Recomendarme</button>
+    <div id="wResult" class="result"></div>
+  </div>
+</section>
+
+<!-- 7. GENERADOR -->
+<section id="generador" class="section alt">
+  <h2>⚙️ Generador de configuración</h2>
+  <div class="gen-grid">
+    <form id="genForm" class="card">
+      <label>Juego <select id="gGame"><option>Minecraft</option><option>Terraria</option><option>Valheim</option><option>Stardew Valley</option><option>Factorio</option></select></label>
+      <label>Nombre del servidor <input id="gName" value="Mi servidor Musu"></label>
+      <label>Contraseña <input id="gPass" placeholder="opcional"></label>
+      <label>Max. jugadores <input id="gPlayers" type="number" min="1" max="100" value="8"></label>
+      <label>Dificultad <select id="gDiff"><option>Fácil</option><option>Normal</option><option>Difícil</option></select></label>
+      <label>Puerto <input id="gPort" type="number" value="25565"></label>
+      <button type="submit" class="btn primary">Generar archivo</button>
+    </form>
+    <div class="card"><div class="code-head"><strong id="genFileName">server.properties</strong><button class="btn small" id="genCopy">Copiar</button><button class="btn small" id="genDl">Descargar</button></div><pre id="genOut"></pre></div>
+  </div>
+</section>
+
+<!-- 8. ESTADO -->
+<section id="estado" class="section">
+  <h2>📡 Servidores reales <small class="muted">· estado en vivo</small></h2>
+  <p class="muted">Como en las páginas de listas (estilo TerraForge): IP, estado, jugadores y versión comprobados en directo. Pulsa <strong>Copiar IP</strong> y pégala en Minecraft → Multijugador → Añadir servidor.</p>
+  <div class="filters">
+    <button class="btn small primary" id="pubRefresh">🔄 Actualizar estados</button>
+    <span class="muted small" id="pubUpdated"></span>
+  </div>
+  <div id="pubList" class="grid"></div>
+  <h3 style="margin-top:26px">➕ Mis servidores</h3>
+  <form id="srvForm" class="card inline-form">
+    <input id="sName" placeholder="Nombre del servidor" required>
+    <input id="sAddr" placeholder="Dirección (ej: abc.playit.gg:1234)" required>
+    <input id="sGame" placeholder="Juego" value="Minecraft">
+    <button class="btn primary small" type="submit">Registrar</button>
+  </form>
+  <div id="srvList" class="grid"></div>
+  <p class="muted small">Comprobación real para <strong>Minecraft Java</strong> vía mcsrvstat.us. Otros juegos (Terraria, Valheim…) no permiten ping desde el navegador: regístralos y marca su estado a mano. Todo se guarda en tu navegador.</p>
+</section>
+
+<!-- 9. COMUNIDAD -->
+<section id="comunidad" class="section alt">
+  <h2>💬 Comunidad y ayuda</h2>
+  <div class="grid">
+    <div class="card"><h3>❓ Preguntas frecuentes</h3>
+      <details open><summary>¿Es realmente gratis?</summary><p>Sí. Usas tu PC o capas gratuitas de Oracle/Google + túneles gratis. Solo necesitas el juego original.</p></details>
+      <details><summary>¿Necesito saber informática?</summary><p>No. Cada guía está escrita con capturas y comandos para copiar/pegar.</p></details>
+      <details><summary>¿Tengo que abrir puertos?</summary><p>No. Usa Playit.gg o Tailscale y te saltas el router.</p></details>
+      <details><summary>¿Puedo usar mods?</summary><p>Sí: Minecraft (Forge/Fabric/Paper), Terraria (tModLoader), Valheim (BepInEx). Cada guía lo explica.</p></details>
+    </div>
+    <div class="card"><h3>🛠️ Reportar guía desactualizada</h3>
+      <form id="reportForm"><input id="rGame" placeholder="Juego" required><textarea id="rMsg" placeholder="¿Qué falla? ¿Qué versión?" required></textarea><button class="btn primary small">Enviar reporte</button></form>
+      <div id="rOk" class="result" hidden>¡Gracias! Reporte guardado. Lo revisaremos. 💚</div>
+      <h3>👾 Discord</h3><p>Únete a la comunidad: <code>discord.gg/servergratis</code></p><a class="btn ghost small" href="https://discord.gg" target="_blank" rel="noopener">Abrir Discord</a>
+    </div>
+  </div>
+</section>
+
+<!-- 10. LEGAL -->
+<section id="legal" class="section">
+  <h2>📜 Información legal</h2>
+  <div class="card small-text">
+    <p><strong>Sin afiliación:</strong> ServerGratis (Musu) no está afiliada a Mojang, Re-Logic, ConcernedApe, Iron Gate ni a Oracle/Google. Todas las marcas pertenecen a sus dueños.</p>
+    <p><strong>Privacidad:</strong> esta web es estática, no rastrea. Favoritos y servidores se guardan solo en tu navegador (localStorage). Sin cookies de terceros.</p>
+    <p><strong>Límites de lo gratis:</strong> Oracle Cloud pide tarjeta para verificar identidad; Google e2-micro tiene 1 GB RAM; Aternos tiene colas. Respeta los términos de cada servicio y usa juegos originales.</p>
+    <p><strong>Sostenibilidad:</strong> hosting gratuito (GitHub Pages / Netlify / Cloudflare Pages) + donaciones opcionales y enlaces de afiliados marcados como tales.</p>
+  </div>
+</section>
+</main>
+
+<footer>
+  <p>🎮 <strong>ServerGratis · Musu</strong> — guías en Markdown, web estática, gratis para siempre. <a href="https://github.com" target="_blank" rel="noopener">GitHub</a> · <a href="#legal">Legal</a></p>
+  <p class="muted small">¿Te sirve? <a href="#" id="donate">💚 Donar</a> · Aloja esta web gratis en GitHub Pages / Netlify / Cloudflare Pages.</p>
+</footer>
+
+<!-- Modal guía móvil -->
+<div id="toast" role="status"></div>
+<script src="app.js"></script>
+</body>
+</html>
