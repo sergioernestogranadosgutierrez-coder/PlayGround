@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ChatGPT Clone Pro — Todo desbloqueado</title>
+<link rel="stylesheet" href="styles.css" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2310a37f'/><text x='50' y='68' font-size='55' text-anchor='middle' fill='white' font-family='Arial'>G</text></svg>" />
+</head>
+<body>
+<div id="app">
+  <aside id="sidebar">
+    <div class="side-top">
+      <button id="btnToggleSide" class="icon-btn only-mobile" title="Cerrar">✕</button>
+      <button id="btnNewChat" class="new-chat-btn"><span class="plus">＋</span> Nuevo chat <kbd>Ctrl K</kbd></button>
+      <div class="search-box"><span>🔍</span><input id="searchChats" type="text" placeholder="Buscar chats..." autocomplete="off" /></div>
+      <div class="folder-row">
+        <select id="folderFilter" title="Filtrar por proyecto"><option value="">📁 Todos</option></select>
+        <button id="btnNewFolder" class="icon-btn" title="Nuevo proyecto">＋📁</button>
+      </div>
+    </div>
+    <nav id="chatList" aria-label="Historial"></nav>
+    <div class="side-bottom">
+      <div class="pro-banner">⭐ <b>PRO desbloqueado</b><small>GPT-4o • o1 • Imagen • Voz • Visión</small></div>
+      <button id="btnDemoMode" class="side-link" title="Alternar modo demo / API">🧪 <span>Modo demo: ON</span></button>
+      <button id="btnSettings" class="side-link">⚙️ <span>Configuración, API y Memoria</span></button>
+      <button id="btnExport" class="side-link">⬇️ <span>Exportar chat (.md)</span></button>
+      <button id="btnClearAll" class="side-link danger">🗑️ <span>Borrar todo</span></button>
+      <div class="user-card"><div class="avatar">TÚ</div><div><b id="userNameLabel">Usuario Pro</b><small>Todo gratis en local</small></div></div>
+    </div>
+  </aside>
+  <div id="backdrop"></div>
+
+  <main id="main">
+    <header id="topbar">
+      <button id="btnMenu" class="icon-btn only-mobile">☰</button>
+      <div class="model-picker">
+        <button id="modelBtn">GPT-4o Pro ▾</button>
+        <div id="modelMenu" class="menu hidden">
+          <button data-model="gpt-4o">GPT-4o Pro <small>todo desbloqueado</small></button>
+          <button data-model="o1-think">o1-Think 🧠 <small>razona paso a paso</small></button>
+          <button data-model="gpt-4o-mini">GPT-4o mini <small>rápido</small></button>
+          <button data-model="claude-pro">Claude Pro ✍️ <small>redacción</small></button>
+          <button data-model="gemini-pro">Gemini Pro 🔍 <small>búsqueda</small></button>
+          <button data-model="imagen-pro">Imagen Pro 🎨 <small>genera fotos</small></button>
+        </div>
+      </div>
+      <div class="top-actions">
+        <span id="apiBadge" class="badge live">⭐ PRO</span>
+        <button id="btnThink" class="icon-btn" title="Modo razonamiento o1">🧠</button>
+        <button id="btnShare" class="icon-btn" title="Copiar conversación">🔗</button>
+        <button id="btnTheme" class="icon-btn" title="Tema">🌙</button>
+      </div>
+    </header>
+
+    <div id="chatScroll">
+      <section id="welcome">
+        <div class="logo">✦</div>
+        <h1>ChatGPT Pro — ¿qué creamos hoy?</h1>
+        <p class="sub">Chat • Imágenes • Voz • Visión • Archivos • Código ejecutable • Búsqueda • Memoria — todo funciona gratis aquí.</p>
+        <div class="sugg-grid">
+          <button class="sugg" data-prompt="/imagen un dragón de neón sobre una ciudad futurista">🎨 <b>Imagen Pro</b><span>dragón de neón futurista</span></button>
+          <button class="sugg" data-prompt="/buscar fotosíntesis">🔍 <b>Buscar</b><span>info real de Wikipedia</span></button>
+          <button class="sugg" data-prompt="Escríbeme una función en JavaScript que ordene un array por fecha y dime cómo ejecutarla">💻 <b>Código + Run</b><span>JS ejecutable aquí mismo</span></button>
+          <button class="sugg" data-prompt="Hazme un plan de estudio de 7 días para Python y grafica mi progreso: 2,4,6,8,7,9,10">📊 <b>Plan + Gráfica</b><span>con chart incluido</span></button>
+          <button class="sugg" data-prompt="Me llamo Alex, recuérdalo">🧠 <b>Memoria</b><span>te recordaré</span></button>
+          <button class="sugg" data-prompt="recuérdame en 15 segundos tomar agua">⏰ <b>Recordatorio</b><span>notificación real</span></button>
+        </div>
+      </section>
+      <div id="messages"></div>
+      <div id="typingRow" class="hidden">
+        <div class="msg assistant"><div class="m-avatar">✦</div><div class="m-body"><span class="dots"><i></i><i></i><i></i></span> <span id="typingText">Pensando…</span></div></div>
+      </div>
+    </div>
+
+    <footer id="composerWrap">
+      <div id="attachPreview" class="hidden"></div>
+      <div id="toolbar">
+        <button data-tool="imagen" title="Generar imagen gratis">🎨</button>
+        <button data-tool="buscar" title="Búsqueda web real">🔍</button>
+        <button data-tool="voz" title="Dictar por voz">🎙</button>
+        <button data-tool="foto" title="Subir foto (visión)">👁</button>
+        <button data-tool="archivo" title="Subir .txt/.md (resume)">📄</button>
+        <button data-tool="pensar" title="Razonamiento o1">🧠</button>
+        <button data-tool="leer" title="Leer respuesta en voz alta">🔊</button>
+      </div>
+      <div id="composer">
+        <button id="btnAttach" class="icon-btn" title="Adjuntar foto o texto">📎</button>
+        <textarea id="input" rows="1" placeholder="Envía un mensaje… /imagen, /buscar, pega código, sube foto…"></textarea>
+        <button id="btnStop" class="icon-btn hidden" title="Detener">⏹</button>
+        <button id="btnSend" class="send-btn" title="Enviar">↑</button>
+      </div>
+      <p class="disclaimer">Clon educativo <b>PRO con servidor propio</b> (server.js): chat, imágenes, búsqueda y visión pasan por <b>/api</b> — gratis. La voz y recordatorios usan tu navegador. GPT-4 real requiere tu API key en ⚙️ o <b>OPENAI_API_KEY</b> en el servidor.</p>
+    </footer>
+  </main>
+</div>
+
+<div id="modal" class="hidden"><div class="modal-card">
+  <h2>⚙️ Configuración Pro</h2>
+  <label>Tu nombre (memoria) <input id="inpName" type="text" placeholder="Ej: Alex" /></label>
+  <label>OpenAI API Key <small>(opcional, solo tu navegador — activa GPT real + visión real)</small><input id="inpKey" type="password" placeholder="sk-..." autocomplete="off" /></label>
+  <label>Endpoint compatible OpenAI <input id="inpEndpoint" type="text" value="https://api.openai.com/v1/chat/completions" /></label>
+  <label>Modelo <input id="inpModel" type="text" value="gpt-4o" /></label>
+  <label class="row"><input id="inpStream" type="checkbox" checked /> Streaming palabra por palabra</label>
+  <label class="row"><input id="inpEnter" type="checkbox" checked /> Enter envía</label>
+  <label class="row"><input id="inpThink" type="checkbox" /> 🧠 Razonamiento o1 siempre</label>
+  <div class="modal-actions">
+    <button id="btnSaveSettings" class="primary">Guardar</button>
+    <button id="btnCloseSettings">Cerrar</button>
+    <button id="btnWipeKey" class="danger-text">Borrar key</button>
+    <button id="btnWipeMem" class="danger-text">Borrar memoria</button>
+  </div>
+  <p class="hint">💡 <b>Sin key:</b> todo funciona en simulación local + servicios gratuitos (imágenes, wiki, voz). <b>Con key:</b> el chat y la visión usan OpenAI de verdad.</p>
+</div></div>
+
+<div id="previewModal" class="hidden"><div class="modal-card wide">
+  <h2 id="previewTitle">Vista previa</h2>
+  <iframe id="previewFrame" sandbox="allow-scripts" title="preview"></iframe>
+  <div class="modal-actions"><button id="btnClosePreview">Cerrar</button></div>
+</div></div>
+
+<input type="file" id="fileImage" accept="image/*" class="hidden" />
+<input type="file" id="fileText" accept=".txt,.md,.js,.py,.json,.csv" class="hidden" />
+<div id="toast" class="hidden"></div>
+<script src="app.js"></script>
+</body>
+</html>
