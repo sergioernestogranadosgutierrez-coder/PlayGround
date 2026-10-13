@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BuzzPost ⚡ Cadena automática: crear → publicar → medir</title>
+<meta name="description" content="Plataforma automática de marketing: crea una vez, adapta, aprueba, publica, responde y mide en 8 redes sin intervención manual." />
+<link rel="stylesheet" href="styles.css" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <div class="logo">⚡ <span>BuzzPost</span> <em>cadena automática</em></div>
+    <nav class="topnav">
+      <a href="#crear">Crear</a>
+      <a href="#motor">IA</a>
+      <a href="#conexiones">Cuentas</a>
+      <a href="#aprobar">Aprobar</a>
+      <a href="#publicar">Publicar</a>
+      <a href="#responder">Responder</a>
+      <a href="#medir">Medir</a>
+      <a href="#canal">📢 Canal</a>
+    </nav>
+    <button id="btnTema" class="btn ghost sm" title="Modo claro/oscuro">🌙</button>
+  </div>
+  <div class="wrap pipe">
+    <div class="pstep done" data-goto="#crear">1 Crear</div>
+    <div class="pstep" data-goto="#resultados">2 Adaptar</div>
+    <div class="pstep" data-goto="#aprobar">3 Aprobar</div>
+    <div class="pstep" data-goto="#publicar">4 Publicar</div>
+    <div class="pstep" data-goto="#responder">5 Responder</div>
+    <div class="pstep" data-goto="#medir">6 Medir</div>
+    <div class="pstep" data-goto="#medir">7 Mejorar</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="hero-text">
+      <div class="pill">🔗 Cadena automática · 0 trabajo manual repetido</div>
+      <h1>Crear → adaptar → aprobar → <span class="grad">publicar → responder → medir</span></h1>
+      <p class="sub">Escribe una idea o pega un discurso. BuzzPost genera guiones, adapta el formato a cada red, pide aprobación solo cuando hace falta, <b>publica solo en el mejor horario</b>, responde comentarios y te envía el informe. Tú solo apruebas lo sensible.</p>
+      <div class="hero-cta">
+        <a href="#crear" class="btn primary big">✨ Crear campaña automática</a>
+        <a href="#conexiones" class="btn ghost big">🔌 Conectar mis redes</a>
+      </div>
+      <div class="stats">
+        <div><b id="statTiempo">~38s</b><span>por campaña</span></div>
+        <div><b>8 redes</b><span>vía API + OAuth</span></div>
+        <div><b id="statAuto">0</b><span>publicaciones auto</span></div>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="mock-phone">
+        <div class="mock-head">📸 instagram <span>•••</span></div>
+        <div class="mock-img" id="heroMockImg">🌮</div>
+        <div class="mock-body">
+          <div>❤️ 💬 ✈️ &nbsp; <b>2.431 Me gusta</b></div>
+          <p id="heroMockText"><b>tacos_lupita</b> ¡NUEVO! Tacos al pastor 2x1 solo hoy 🌮🔥 Ven ya o pide por WhatsApp 👇 #tacos #promo</p>
+        </div>
+      </div>
+      <div class="float f1">✅ Copy listo</div>
+      <div class="float f2">#️⃣ 12 hashtags</div>
+      <div class="float f3">📅 Auto-publicado</div>
+    </div>
+  </section>
+
+  <!-- 1 CREAR -->
+  <section id="crear" class="panel">
+    <h2><span class="step">1</span> Crear <small>idea o promo en 30 segundos</small></h2>
+    <div class="grid2">
+      <div>
+        <label>Nombre de tu negocio / marca *</label>
+        <input id="inNegocio" placeholder="Ej: Tacos Lupita, Presidencia Municipal, Mi tienda" maxlength="60" />
+        <label>¿Qué quieres anunciar? *</label>
+        <textarea id="inPromo" rows="3" placeholder="Ej: 2x1 en tacos al pastor este viernes, incluye agua fresca."></textarea>
+        <div class="row2">
+          <div><label>Link / WhatsApp</label><input id="inLink" placeholder="https://wa.me/521..." /></div>
+          <div><label>Precio / oferta</label><input id="inPrecio" placeholder="Ej: $99, 2x1, -30%" /></div>
+        </div>
+        <label>Imagen del post</label>
+        <div class="row2">
+          <input type="file" id="inImg" accept="image/*" />
+          <div class="emoji-pick"><span>o emoji:</span>
+            <button data-e="🌮">🌮</button><button data-e="👗">👗</button><button data-e="💇">💇</button>
+            <button data-e="🏋️">🏋️</button><button data-e="🏠">🏠</button><button data-e="🎉">🎉</button>
+          </div>
+        </div>
+        <label>Responsable (queda en auditoría)</label>
+        <input id="inResp" placeholder="Ej: Ana – Comunicación" maxlength="60" />
+      </div>
+      <div>
+        <label>Objetivo</label>
+        <div class="chips" id="chipsObjetivo">
+          <button class="chip on" data-v="vender">🛒 Vender</button>
+          <button class="chip" data-v="visitas">📍 Atraer visitas</button>
+          <button class="chip" data-v="seguidores">📈 Seguidores</button>
+          <button class="chip" data-v="evento">🎉 Evento</button>
+          <button class="chip" data-v="lanzamiento">🚀 Lanzamiento</button>
+          <button class="chip" data-v="comunicado">📢 Comunicado</button>
+        </div>
+        <label>Tono (biblioteca de marca)</label>
+        <div class="chips" id="chipsTono">
+          <button class="chip on" data-v="divertido">😄 Divertido</button>
+          <button class="chip" data-v="urgente">🔥 Urgente</button>
+          <button class="chip" data-v="profesional">💼 Profesional</button>
+          <button class="chip" data-v="inspirador">✨ Inspirador</button>
+          <button class="chip" data-v="cercano">🤗 Cercano</button>
+          <button class="chip" data-v="institucional">🏛️ Institucional</button>
+        </div>
+        <label>Redes a incluir</label>
+        <div class="nets" id="netsSel">
+          <label><input type="checkbox" checked value="instagram" /> 📸 Instagram</label>
+          <label><input type="checkbox" checked value="tiktok" /> 🎵 TikTok</label>
+          <label><input type="checkbox" checked value="facebook" /> 👍 Facebook</label>
+          <label><input type="checkbox" checked value="x" /> ✖️ X</label>
+          <label><input type="checkbox" checked value="linkedin" /> 💼 LinkedIn</label>
+          <label><input type="checkbox" checked value="youtube" /> ▶️ YouTube</label>
+          <label><input type="checkbox" checked value="whatsapp" /> 💬 WhatsApp</label>
+          <label><input type="checkbox" checked value="telegram" /> ✈️ Telegram</label>
+        </div>
+        <button id="btnGenerar" class="btn primary xl">⚡ Generar y adaptar a mis redes</button>
+        <p class="hint">Al generar entra solo a la cola de <b>aprobación</b>. Lo rutinario se aprueba solo, lo sensible espera tu visto bueno.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MOTOR IA DISCURSO -->
+  <section id="motor" class="panel">
+    <h2>🤖 Motor de contenido con IA <small>1 discurso → clips + frases + carrusel + WhatsApp</small></h2>
+    <div class="grid2">
+      <div>
+        <label>Pega un discurso, comunicado o idea larga</label>
+        <textarea id="inDiscurso" rows="7" placeholder="Pega aquí el discurso completo o una idea larga. Ej: Hoy inauguramos el nuevo mercado..."></textarea>
+        <div class="row2">
+          <button id="btnDiscurso" class="btn primary">⚙️ Despiezar automáticamente</button>
+          <button id="btnDemo" class="btn ghost">Ver ejemplo</button>
+        </div>
+        <p class="hint">Todo local y privado. Si conectas una clave de IA (opcional) mejora la redacción; si no, usa el motor local.</p>
+        <label>Clave IA opcional (OpenAI-compatible, se guarda solo en tu navegador)</label>
+        <input id="inAIKey" type="password" placeholder="sk-... (opcional)" />
+      </div>
+      <div id="discursoOut" class="discurso-out">
+        <div class="empty">📄 Aquí aparecerán: <b>3 clips con guion y subtítulos</b>, <b>frases destacadas</b>, <b>carrusel de 5 slides</b> y <b>resumen para WhatsApp</b>.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCORE -->
+  <section id="scoreBox" class="panel score hidden">
+    <div class="score-ring"><span id="scoreNum">0</span><small>/100</small></div>
+    <div><h3>Score de viralidad: <span id="scoreLabel">—</span></h3><ul id="scoreTips"></ul></div>
+    <div class="score-actions">
+      <button class="btn ghost sm" id="btnMejorar">✨ Mejorar automáticamente</button>
+      <button class="btn ghost sm" id="btnDescargar">⬇️ Descargar pack (.txt)</button>
+    </div>
+  </section>
+
+  <!-- 2 ADAPTAR -->
+  <section id="resultados" class="panel">
+    <div class="res-head">
+      <h2><span class="step">2</span> Adaptación automática por red</h2>
+      <div><button class="btn ghost sm" id="btnCopiarTodo">📋 Copiar todo</button>
+      <button class="btn ghost sm" id="btnLimpiar">🗑️ Limpiar</button></div>
+    </div>
+    <div class="tablewrap"><table class="tbl" id="tblFormatos">
+      <thead><tr><th>Red</th><th>Formato</th><th>Límite</th><th>Estilo auto</th><th>Mejor hora</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <div class="fmtprev">
+      <span>Vista de formato:</span>
+      <button class="chip on" data-fmt="9:16">📱 9:16 Reels/TikTok</button>
+      <button class="chip" data-fmt="1:1">⬛ 1:1 Feed</button>
+      <button class="chip" data-fmt="16:9">🖥️ 16:9 YouTube</button>
+      <div id="fmtBox" class="fmtbox f916">9:16</div>
+    </div>
+    <div id="cards" class="cards">
+      <div class="empty">👆 Genera arriba y verás cada red con su texto reescrito, contador y preview.</div>
+    </div>
+  </section>
+
+  <!-- CONEXIONES -->
+  <section id="conexiones" class="panel">
+    <h2>🔌 Cuentas conectadas <small>OAuth + API oficial · tokens con vencimiento y reintentos</small></h2>
+    <p class="hint">Demo local: “Conectar” simula el flujo OAuth y guarda un token con vencimiento. En producción estos botones llaman a tu backend (<code>/api/oauth/:red</code>), que guarda el refresh token y publica con la API oficial. Sin token válido, la publicación queda en cola y te avisa.</p>
+    <div id="connGrid" class="conngrid"></div>
+  </section>
+
+  <!-- 3 APROBAR -->
+  <section id="aprobar" class="panel">
+    <h2><span class="step">3</span> Aprobación con control humano</h2>
+    <div class="grid2">
+      <div>
+        <label class="switch"><input type="checkbox" id="swAuto" checked /> ✅ Aprobación automática de contenido rutinario (lo sensible siempre pide revisión)</label>
+        <div class="checklist" id="checkList">
+          <label><input type="checkbox" data-c="datos" /> Verificación de datos y cifras</label>
+          <label><input type="checkbox" data-c="derechos" /> Derechos de música e imágenes</label>
+          <label><input type="checkbox" data-c="etiqueta" /> Etiqueta de publicidad / contenido político si aplica</label>
+          <label><input type="checkbox" data-c="tono" /> Tono y voz de marca respetados</label>
+        </div>
+        <p class="hint">Palabras que fuerzan revisión manual: <code>voto, elección, candidato, denuncia, protesta, emergencia, muerto, fraude, impuesto</code>.</p>
+      </div>
+      <div>
+        <h3>Cola de aprobación (<span id="aprCount">0</span>)</h3>
+        <ul id="aprList" class="callist"><li class="muted">Genera una campaña para verla aquí.</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 PUBLICAR -->
+  <section id="publicar" class="panel">
+    <h2><span class="step">4</span> Publicación automática <small>cola inteligente + reglas + reintentos</small></h2>
+    <div class="grid2">
+      <div>
+        <label class="switch"><input type="checkbox" id="swSmart" checked /> 🧠 Cola inteligente: publicar solo en el mejor horario de cada red</label>
+        <label class="switch"><input type="checkbox" id="ruleLive" checked /> 📡 Regla: cada discurso en vivo genera un clip en 10 minutos</label>
+        <label class="switch"><input type="checkbox" id="ruleCom" checked /> 📢 Regla: cada comunicado va a todas las redes</label>
+        <div class="row2" style="margin-top:10px">
+          <button id="btnAutoPub" class="btn primary">🚀 Publicar todo lo aprobado</button>
+          <button id="btnSimLive" class="btn ghost">🔴 Simular “en vivo”</button>
+        </div>
+        <p class="hint">Si una red falla o el token venció: reintento automático ×3 y alerta. Todo queda registrado en auditoría.</p>
+        <div id="pubLog" class="log"></div>
+      </div>
+      <div>
+        <h3>📅 Calendario y programadas (<span id="calCount">0</span>)</h3>
+        <div class="row2"><input type="date" id="inFecha" /><input type="time" id="inHora" value="18:00" /></div>
+        <button id="btnProgramar" class="btn primary" style="margin-top:8px">➕ Añadir al calendario</button>
+        <ul id="calList" class="callist"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 RESPONDER -->
+  <section id="responder" class="panel">
+    <h2><span class="step">5</span> Respuesta automática <small>bot + moderación + alertas de crisis</small></h2>
+    <div class="grid2">
+      <div>
+        <h3>🤖 Respuestas frecuentes del bot</h3>
+        <label>Palabra clave → respuesta (una por línea, formato <code>clave = respuesta</code>)</label>
+        <textarea id="inFaq" rows="5">horario = Abrimos de 9am a 9pm todos los días 🤗
+precio = Tenemos opciones desde $49. Escríbenos QUIERO y te mandamos el menú 💰
+donde = Estamos en el centro, frente al mercado 📍
+quiero = ¡Genial! Ya te atendemos por aquí 👇 ¿qué te apetece hoy?</textarea>
+        <div class="row2">
+          <label class="switch"><input type="checkbox" id="swBot" checked /> Bot activo en comentarios y DMs</label>
+          <label class="switch"><input type="checkbox" id="swMod" checked /> Moderar spam e insultos</label>
+        </div>
+        <div class="row2" style="margin-top:8px">
+          <input id="inInbox" placeholder="Simula un comentario entrante..." />
+          <button id="btnInbox" class="btn ghost">💬 Simular</button>
+        </div>
+      </div>
+      <div>
+        <h3>📥 Bandeja (<span id="inboxCount">0</span>) <small id="crisisBadge"></small></h3>
+        <ul id="inboxList" class="callist"><li class="muted">Sin mensajes. Simula uno o publica y llegarán solos.</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6-7 MEDIR -->
+  <section id="medir" class="panel">
+    <h2><span class="step">6</span> Analítica y mejora automática <small>informes + A/B + ajuste de calendario</small></h2>
+    <div class="grid2">
+      <div>
+        <h3>📊 Rendimiento por red (clic para +100 alcance)</h3>
+        <canvas id="chart" width="460" height="220" class="chart"></canvas>
+        <div class="row2" style="margin-top:8px">
+          <button id="btnAB" class="btn ghost">🧪 Nueva prueba A/B</button>
+          <button id="btnInforme" class="btn ghost">📄 Generar informe diario/semanal</button>
+        </div>
+        <div id="abOut" class="ab"></div>
+        <div id="informeOut" class="informe"></div>
+      </div>
+      <div>
+        <h3>🧠 Mejoras aplicadas solas</h3>
+        <ul id="mejorasList" class="callist"><li class="muted">Publica y mide para que la plataforma aprenda: repetirá el formato ganador y moverá horarios flojos.</li></ul>
+        <h3 style="margin-top:14px">🧾 Auditoría <small>fecha · responsable · acción</small></h3>
+        <div class="row2">
+          <button id="btnBackup" class="btn ghost sm">💾 Exportar respaldo</button>
+          <label class="btn ghost sm" style="text-align:center">📥 Importar <input type="file" id="inRestore" accept="application/json" hidden /></label>
+        </div>
+        <ul id="auditList" class="callist"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- IDEAS + LIMITES -->
+  <section id="canal" class="panel">
+    <h2>📢 Impulsor de Canal <small>1 historia diaria → canal de WhatsApp + promo en IG y YouTube</small></h2>
+    <div class="limite">
+      ⚠️ <b>Límite honesto:</b> WhatsApp <b>no ofrece API pública para publicar en Canales</b>. El canal es <b>semi-automático</b>: la app te avisa a la hora programada y abre el compartir con texto + imagen listos, tú tocas “enviar al canal”. La <b>promo en Instagram y YouTube sí es 100% automática</b> con sus APIs oficiales.
+    </div>
+    <div class="grid2">
+      <div>
+        <label>Nombre de tu canal</label>
+        <input id="cnNombre" placeholder="Ej: Misterios del Mundo 🌙" maxlength="60" />
+        <label>Enlace de invitación al canal *</label>
+        <input id="cnLink" placeholder="https://whatsapp.com/channel/..." />
+        <div class="row2">
+          <div><label>Tipo de hoy</label>
+            <select id="cnTipo">
+              <option value="auto">🎲 Rotar solo (recomienda por clics)</option>
+              <option value="curioso">🤯 Dato curioso</option>
+              <option value="misterio">🕵️ Misterio</option>
+              <option value="leyenda">🐉 Leyenda</option>
+            </select>
+          </div>
+          <div><label>Tono</label>
+            <select id="cnTono">
+              <option value="misterioso">🌙 Misterioso</option>
+              <option value="divertido">😄 Divertido</option>
+              <option value="epico">🔥 Épico</option>
+              <option value="cercano">🤗 Cercano</option>
+            </select>
+          </div>
+        </div>
+        <div class="row2" style="margin-top:10px">
+          <button id="btnCanal" class="btn primary">✨ Generar historia de hoy</button>
+          <button id="btnCanalRepeat" class="btn ghost">🏆 Repetir lo que más convierte</button>
+        </div>
+        <h3 style="margin-top:14px">⏰ Programar aviso</h3>
+        <div class="row2">
+          <input type="date" id="cnFecha" /><input type="time" id="cnHora" value="20:00" />
+        </div>
+        <button id="btnCanalProg" class="btn ghost" style="margin-top:8px">🔔 Programar + avisarme</button>
+        <p class="hint">A la hora programada suena la notificación y se abre el compartir. Permite las notificaciones si el navegador lo pide.</p>
+      </div>
+      <div>
+        <div id="canalOut"><div class="empty">📢 Aquí aparecerá tu historia del día con título gancho, imagen vertical 9:16, mensaje del canal y promos para IG + YouTube.</div></div>
+        <canvas id="cnCanvas" width="540" height="960" class="hidden"></canvas>
+      </div>
+    </div>
+    <div class="grid2" style="margin-top:14px">
+      <div>
+        <h3>📅 Cola del canal (<span id="cnCount">0</span>)</h3>
+        <ul id="cnList" class="callist"><li class="muted">Sin historias programadas.</li></ul>
+      </div>
+      <div>
+        <h3>📈 Qué tema trae más clics al canal</h3>
+        <ul id="cnStats" class="callist"><li class="muted">Genera historias y registra clics para aprender.</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="ideas" class="panel">
+    <h2>💡 Banco de ideas virales <small>1 clic para usar</small></h2>
+    <div class="chips" id="chipsIdeasFiltro">
+      <button class="chip on" data-v="todos">Todos</button>
+      <button class="chip" data-v="ventas">Ventas</button>
+      <button class="chip" data-v="contenido">Contenido</button>
+      <button class="chip" data-v="humor">Humor / trend</button>
+    </div>
+    <div id="ideasGrid" class="ideas"></div>
+  </section>
+
+  <section class="panel warn">
+    <h2>⚠️ Límites reales que conviene saber</h2>
+    <ul>
+      <li>📲 <b>TikTok e Instagram exigen app aprobada</b> para publicar por API. Esta demo publica directo donde la red lo permite (X, Facebook, LinkedIn, WhatsApp/Telegram vía enlaces) y deja el resto en <b>copiar+pegar con 1 clic</b> hasta que conectes tu app aprobada.</li>
+      <li>💬 <b>WhatsApp Business</b> solo permite mensajes masivos a quien aceptó recibirlos (opt-in) y con plantillas aprobadas.</li>
+      <li>🗳️ Los <b>anuncios políticos requieren verificación de identidad y etiqueta</b> en Meta y Google. Activa la casilla de etiqueta en aprobación.</li>
+      <li>🛡️ Publica <b>solo desde cuentas oficiales</b>. Las redes sancionan cuentas falsas o bots que simulan apoyo, y la ley electoral lo castiga en muchos países.</li>
+    </ul>
+  </section>
+
+  <footer class="foot"><p>Hecho con ⚡ <b>BuzzPost</b> — cadena automática con control humano. Todo se guarda en tu navegador; conecta tu backend <code>/api/*</code> para producción multiusuario.</p></footer>
+</main>
+<div id="toast" class="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
