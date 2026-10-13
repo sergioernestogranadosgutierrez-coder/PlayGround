@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BuzzPost — Marketing en todas las redes, rápido y fácil</title>
+<meta name="description" content="Escribe una vez, publica en todas las redes. Crea, adapta y programa contenido para Instagram, TikTok, X, Facebook, LinkedIn y más en segundos.">
+<style>
+:root{
+  --bg:#0b0b14; --card:#151524; --card2:#1d1d31; --line:#2a2a45;
+  --txt:#f4f4fb; --mut:#a5a5c0; --acc:#7c3aed; --acc2:#ec4899; --ok:#22c55e; --warn:#f59e0b;
+  --grad:linear-gradient(135deg,#7c3aed,#ec4899,#f59e0b);
+  --r:16px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:radial-gradient(1200px 600px at 20% -10%,#2a1a5e 0%,transparent 60%),radial-gradient(900px 500px at 90% 0%,#4a1030 0%,transparent 55%),var(--bg);color:var(--txt);min-height:100vh}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:20px 16px 80px}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:22px;letter-spacing:.2px}
+.logo-mark{width:42px;height:42px;border-radius:14px;background:var(--grad);display:grid;place-items:center;font-size:24px;box-shadow:0 8px 30px rgba(236,72,153,.4)}
+.badge{font-size:12px;background:#ffffff14;border:1px solid var(--line);padding:6px 10px;border-radius:999px;color:var(--mut)}
+.hero{background:linear-gradient(180deg,#ffffff10,#ffffff04);border:1px solid var(--line);border-radius:24px;padding:28px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:auto -80px -120px auto;width:360px;height:360px;background:var(--grad);filter:blur(110px);opacity:.35;pointer-events:none}
+.hero h1{margin:6px 0 8px;font-size:clamp(28px,5vw,48px);line-height:1.02}
+.hero h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--mut);max-width:640px;font-size:17px;margin:0 0 18px}
+.steps{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.step-pill{background:#ffffff0d;border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:14px}
+.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:800;cursor:pointer;font-size:15px;transition:.15s}
+.btn-primary{background:var(--grad);color:white;box-shadow:0 8px 24px rgba(124,58,237,.45)}
+.btn-primary:hover{transform:translateY(-1px)}
+.btn-ghost{background:#ffffff0d;color:var(--txt);border:1px solid var(--line)}
+.btn-small{padding:8px 12px;font-size:13px;border-radius:10px}
+.grid{display:grid;gap:16px}
+@media(min-width:900px){.grid-2{grid-template-columns:1.1fr .9fr}.grid-3{grid-template-columns:1fr 1fr 1fr}}
+.card{background:linear-gradient(180deg,var(--card),#10101d);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.card h2{margin:0 0 4px;font-size:18px}
+.card p.sub{margin:0 0 12px;color:var(--mut);font-size:14px}
+.networks{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:10px}
+.net{border:1px solid var(--line);background:var(--card2);border-radius:14px;padding:12px;cursor:pointer;user-select:none;transition:.15s;position:relative}
+.net.active{outline:2px solid var(--acc2);background:#251a3a}
+.net .ico{font-size:24px}
+.net b{display:block;margin:6px 0 2px;font-size:14px}
+.net small{color:var(--mut);font-size:12px}
+.net .check{position:absolute;top:8px;right:8px;width:22px;height:22px;border-radius:50%;background:var(--ok);display:none;place-items:center;color:#06240f;font-weight:900}
+.net.active .check{display:grid}
+label.lbl{display:block;font-size:13px;color:var(--mut);margin:12px 0 6px;font-weight:700;text-transform:uppercase;letter-spacing:.6px}
+textarea,input[type=text],input[type=url],select{width:100%;background:#0e0e1b;border:1px solid var(--line);color:var(--txt);border-radius:12px;padding:12px;font-size:15px;font-family:inherit}
+textarea{min-height:120px;resize:vertical}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.chip{background:#ffffff0d;border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:13px;cursor:pointer}
+.chip:hover{background:#ffffff18}
+.tone-row,.obj-row{display:flex;gap:8px;flex-wrap:wrap}
+.tone-row button,.obj-row button{flex:1;min-width:110px}
+.pick{border:1px solid var(--line);background:#ffffff08;color:var(--txt);border-radius:12px;padding:10px;cursor:pointer;font-size:14px;font-weight:700}
+.pick.active{background:var(--grad);border-color:transparent;color:white}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.tab{padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:#ffffff08;cursor:pointer;font-size:14px}
+.tab.active{background:white;color:#111;font-weight:800}
+.preview{background:#0a0a16;border:1px solid var(--line);border-radius:14px;padding:14px;min-height:180px}
+.phone{border-radius:18px;border:1px solid var(--line);background:#0f0f1f;padding:12px}
+.phone-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font-weight:900}
+.meter{height:8px;background:#ffffff12;border-radius:999px;overflow:hidden;margin-top:8px}
+.meter i{display:block;height:100%;background:var(--grad);width:0%}
+.count{font-size:12px;color:var(--mut);margin-top:6px}
+.count.over{color:#ff6b6b;font-weight:800}
+.tip{font-size:13px;background:#f59e0b18;border:1px solid #f59e0b44;border-radius:10px;padding:8px 10px;margin-top:10px;color:#ffd894}
+.publish-grid{display:grid;gap:10px}
+@media(min-width:700px){.publish-grid{grid-template-columns:1fr 1fr}}
+.share-btn{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:var(--card2);border-radius:12px;padding:12px;cursor:pointer;text-decoration:none;transition:.15s;font-weight:700}
+.share-btn:hover{transform:translateY(-1px);border-color:var(--acc)}
+.templates{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.tpl{border-radius:14px;overflow:hidden;border:1px solid var(--line);cursor:pointer;background:#0e0e1b}
+.tpl canvas{width:100%;display:block;aspect-ratio:1/1}
+.tpl.active{outline:3px solid var(--ok)}
+.tpl p{margin:0;padding:8px;font-size:12px;color:var(--mut);text-align:center}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+.kpi div{background:#ffffff08;border:1px solid var(--line);border-radius:12px;padding:10px 14px;flex:1;min-width:140px}
+.kpi b{font-size:22px;display:block}
+.kpi span{font-size:12px;color:var(--mut)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}
+.history-empty{color:var(--mut);font-size:14px;padding:14px;text-align:center}
+.progress{height:10px;background:#ffffff12;border-radius:999px;overflow:hidden;display:none;margin-top:10px}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--ok),#a3e635)}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#111122;border:1px solid var(--ok);padding:12px 18px;border-radius:12px;font-weight:700;display:none;z-index:50;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+footer{margin-top:28px;color:var(--mut);font-size:13px;text-align:center}
+.emoji-row{font-size:22px;display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.emoji-row span{cursor:pointer;background:#ffffff0a;border-radius:8px;padding:4px 6px}
+.emoji-row span:hover{background:#ffffff1c}
+canvas#creative{width:100%;border-radius:14px;border:1px solid var(--line);background:#111}
+.howto{display:grid;gap:10px;margin-top:14px}
+@media(min-width:800px){.howto{grid-template-columns:1fr 1fr 1fr}}
+.howto div{background:#ffffff07;border:1px dashed var(--line);border-radius:14px;padding:14px;font-size:14px}
+.howto b{display:block;margin-bottom:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div class="logo"><div class="logo-mark">⚡</div> BuzzPost <span class="badge">1 texto → todas las redes</span></div>
+  <div class="row"><button class="btn btn-ghost btn-small" onclick="scrollToId('composer')">✍️ Crear</button><button class="btn btn-ghost btn-small" onclick="scrollToId('publish')">🚀 Publicar</button><button class="btn btn-primary btn-small" onclick="quickDemo()">✨ Probar demo</button></div>
+</header>
+
+<div class="hero">
+  <div class="badge">🚀 MARKETING EXPRESS • SIN CUENTAS • SIN COMPLICACIONES</div>
+  <h1>Publica tu marketing en <span>todas las redes</span> en 60 segundos.</h1>
+  <p>Escribe una vez. BuzzPost lo adapta a Instagram, TikTok, X, Facebook, LinkedIn, Threads, WhatsApp y Pinterest, genera hashtags, imagen y mejor hora. Luego publica con 1 clic o programa.</p>
+  <div class="steps"><span class="step-pill">1️⃣ Elige redes</span><span class="step-pill">2️⃣ Escribe / genera</span><span class="step-pill">3️⃣ Previsualiza</span><span class="step-pill">4️⃣ Publica y programa</span></div>
+  <div class="row"><button class="btn btn-primary" onclick="scrollToId('composer')">Crear mi campaña ahora →</button><button class="btn btn-ghost" onclick="scrollToId('how')">Ver cómo funciona</button></div>
+  <div class="kpi" id="kpis"><div><b id="kReach">0</b><span>📈 Alcance estimado</span></div><div><b id="kNets">0</b><span>🌐 Redes activas</span></div><div><b id="kTime">~50s</b><span>⏱️ Tiempo ahorrado</span></div></div>
+</div>
+
+<div style="height:16px"></div>
+<div class="grid grid-2">
+  <div class="card" id="composer">
+    <h2>1️⃣ Elige tus redes</h2><p class="sub">Toca para activar / desactivar. Todo se adapta solo.</p>
+    <div class="networks" id="networks"></div>
+    <label class="lbl">2️⃣ Tu mensaje base</label>
+    <textarea id="baseText" placeholder="Ej: Lanzamos nuestra nueva colección de verano con 20% de descuento esta semana..."></textarea>
+    <div class="emoji-row" id="emojiRow"></div>
+    <div class="grid" style="grid-template-columns:1fr 1fr;gap:10px">
+      <div><label class="lbl">Objetivo</label><div class="obj-row" id="objRow"></div></div>
+      <div><label class="lbl">Tono</label><div class="tone-row" id="toneRow"></div></div>
+    </div>
+    <div class="grid" style="grid-template-columns:1fr 1fr;gap:10px;margin-top:4px">
+      <div><label class="lbl">Llamado a la acción</label><input type="text" id="cta" placeholder="Ej: Compra ahora 👇" value="¡Escríbenos ahora! 👇"></div>
+      <div><label class="lbl">Enlace / WhatsApp</label><input type="url" id="link" placeholder="https://mi-negocio.com/oferta"></div>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <button class="btn btn-primary" onclick="generateCopies()">✨ Generar textos mágicos</button>
+      <button class="btn btn-ghost" onclick="generateHashtags()">#️⃣ Hashtags</button>
+      <button class="btn btn-ghost" onclick="copyMaster()">📋 Copiar</button>
+    </div>
+    <div id="hashtagBox" class="row" style="margin-top:10px"></div>
+  </div>
+
+  <div>
+    <div class="card">
+      <h2>🎨 Creatividad rápida (imagen)</h2><p class="sub">Elige plantilla, escribe tu titular y descarga. Sin diseñador.</p>
+      <div><label class="lbl">Titular de la imagen</label><input type="text" id="creativeTitle" value="¡OFERTA 20% HOY!" oninput="drawCreative()"></div>
+      <div><label class="lbl">Subtítulo</label><input type="text" id="creativeSub" value="Colección Verano • Solo esta semana" oninput="drawCreative()"></div>
+      <div class="templates" id="tplRow" style="margin:10px 0"></div>
+      <canvas id="creative" width="800" height="800"></canvas>
+      <div class="row" style="margin-top:10px">
+        <button class="btn btn-ghost btn-small" onclick="drawCreative()">🔄 Redibujar</button>
+        <button class="btn btn-ghost btn-small" onclick="downloadCreative()">⬇️ Descargar PNG</button>
+        <label class="btn btn-ghost btn-small" style="cursor:pointer">📷 Subir foto<input type="file" id="upload" accept="image/*" hidden></label>
+      </div>
+      <div class="tip">💡 Tip: las imágenes cuadradas 1:1 funcionan en Instagram, Facebook, LinkedIn y X. Para TikTok/Reels usa el mismo diseño como portada.</div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h2>⏰ Mejor hora + alcance</h2><p class="sub" id="bestTime">Calculando…</p>
+      <div class="meter"><i id="reachBar"></i></div>
+      <div class="count" id="reachTxt"></div>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:16px">
+  <h2>3️⃣ Vista previa por red — adaptado automáticamente</h2><p class="sub">Cada red tiene su límite, estilo y checklist. Haz clic en cada pestaña y copia o abre.</p>
+  <div class="tabs" id="tabs"></div>
+  <div class="grid grid-2">
+    <div><div class="phone"><div class="phone-head"><div class="avatar" id="pvAvatar">B</div><div><b id="pvName">Mi Negocio</b><br><small style="color:var(--mut)" id="pvNet">Instagram • ahora</small></div></div><div id="pvText" style="white-space:pre-wrap;font-size:15px">Escribe algo para ver la magia…</div><div id="pvImgWrap" style="margin-top:10px;display:none"><img id="pvImg" style="width:100%;border-radius:12px" alt=""></div><div class="meter"><i id="pvBar"></i></div><div class="count" id="pvCount"></div></div></div>
+    <div><label class="lbl">Texto adaptado (editable)</label><textarea id="adapted" style="min-height:160px"></textarea><div class="tip" id="netTip"></div><div class="row" style="margin-top:10px"><button class="btn btn-ghost btn-small" onclick="copyAdapted()">📋 Copiar esta red</button><button class="btn btn-ghost btn-small" onclick="openShare()">🔗 Compartir ahora</button></div></div>
+  </div>
+</div>
+
+<div class="grid grid-2" style="margin-top:16px">
+  <div class="card" id="publish">
+    <h2>🚀 4️⃣ Publica en 1 clic</h2><p class="sub">Abrimos la app/red con tu texto listo. Sin API, sin contraseñas, funciona ya.</p>
+    <div class="publish-grid" id="shareGrid"></div>
+    <div class="progress" id="simProg"><i id="simBar"></i></div>
+    <div class="row" style="margin-top:12px"><button class="btn btn-primary" onclick="simulatePublish()">⚡ Simular publicación masiva</button><button class="btn btn-ghost" onclick="copyAll()">📦 Copiar kit completo</button></div>
+    <div class="grid" style="grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+      <div><label class="lbl">Programar (fecha/hora)</label><input type="text" id="schedWhen" placeholder="Ej: Mañana 18:00"></div>
+      <div><label class="lbl">Nombre campaña</label><input type="text" id="campName" placeholder="Ej: Oferta Verano"></div>
+    </div>
+    <div class="row" style="margin-top:10px"><button class="btn btn-ghost" onclick="schedule()">📅 Añadir a cola</button><button class="btn btn-ghost" onclick="clearHistory()">🗑️ Borrar historial</button></div>
+  </div>
+  <div class="card">
+    <h2>📅 Cola e historial</h2><p class="sub">Se guarda en tu navegador. Ideal para mostrar a clientes o a tu equipo.</p>
+    <div id="history"></div>
+  </div>
+</div>
+
+<div class="card" id="how" style="margin-top:16px">
+  <h2>❓ ¿Cómo funciona? ¿Necesito conectar mis cuentas?</h2>
+  <div class="howto">
+    <div><b>⚡ Sin conexiones complicadas</b>Usamos los botones oficiales de compartir (X, Facebook, LinkedIn, WhatsApp, Telegram, Pinterest, Email). Tocas, se abre la red con tu texto, publicas. Cero configuración.</div>
+    <div><b>🤖 Adaptación inteligente local</b>Recortamos, añadimos emojis, hashtags y CTA según cada red. Todo ocurre en tu navegador, tus datos no salen a ningún servidor.</div>
+    <div><b>🏢 Para publicar automático 100%</b>Si quieres autopublicación directa necesitarías API keys (Meta Business, TikTok for Business, X API). Esta app te deja el kit listo para pegar o para conectar después con Buffer/Hootsuite/Zapier.</div>
+  </div>
+</div>
+<footer>Hecho con ⚡ BuzzPost • Escribe 1 vez, vende en todas partes • Tus datos viven solo en tu navegador (localStorage)</footer>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const NETS=[
+ {id:'instagram',name:'Instagram',ico:'📸',limit:2200,style:'Visual + hashtags (hasta 30). CTA en bio.',share:t=>`https://www.instagram.com/`,tip:'Usa Reels + carrusel. Pon 8-15 hashtags al final y CTA "Link en bio 👆". La imagen cuadrada es perfecta.'},
+ {id:'tiktok',name:'TikTok',ico:'🎵',limit:2200,style:'Corto, viral, con gancho en 2s.',share:t=>`https://www.tiktok.com/upload`,tip:'Empieza con gancho: "POV", "Nadie habla de esto…". 3-5 hashtags nicho + sonido tendencia.'},
+ {id:'x',name:'X / Twitter',ico:'𝕏',limit:280,style:'Ultra corto y directo.',share:t=>`https://twitter.com/intent/tweet?text=${encodeURIComponent(t)}`,tip:'Máx 280 caracteres. 1-2 hashtags. Si es largo, BuzzPost lo resume solo.'},
+ {id:'facebook',name:'Facebook',ico:'📘',limit:63206,style:'Cercano, con historia y enlace.',share:t=>`https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(t)}`,tip:'40-80 palabras rinden mejor. Pregunta al final para generar comentarios.'},
+ {id:'linkedin',name:'LinkedIn',ico:'💼',limit:3000,style:'Profesional, con aprendizaje.',share:t=>`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(location.href)}`,tip:'Empieza con una lección o dato. Formato con saltos de línea. 3-5 hashtags profesionales.'},
+ {id:'threads',name:'Threads',ico:'🧵',limit:500,style:'Conversacional.',share:t=>`https://www.threads.net/`,tip:'Tono charla con amigos. Haz pregunta para respuestas.'},
+ {id:'whatsapp',name:'WhatsApp',ico:'💬',limit:6000,style:'Directo + enlace.',share:t=>`https://wa.me/?text=${encodeURIComponent(t)}`,tip:'Perfecto para estados y difusión. Incluye enlace + "Responde INFO".'},
+ {id:'pinterest',name:'Pinterest',ico:'📌',limit:800,style:'Inspirador + keywords.',share:t=>`https://pinterest.com/pin/create/button/?description=${encodeURIComponent(t)}`,tip:'Usa palabras clave buscables: ideas, tutorial, decoración, receta…'},
+ {id:'telegram',name:'Telegram',ico:'✈️',limit:4096,style:'Comunidad.',share:t=>`https://t.me/share/url?text=${encodeURIComponent(t)}`,tip:'Ideal para canales. Pon enlace + emoji destacado.'},
+];
+const OBJECTIVES=['Vender','Lanzar','Sorteo','Evento','Visitas','Seguidores'];
+const TONES=['🔥 Urgente','😊 Amable','😎 Divertido','💼 Pro','💖 Emocional'];
+const EMOJIS=['🔥','✨','🚀','💥','🎁','👇','😍','✅','📣','💰','🎉','⏰','💡','❤️'];
+let state={nets:['instagram','tiktok','x','facebook','whatsapp'],obj:'Vender',tone:'🔥 Urgente',tpl:0,adapted:{},uploaded:null};
+function $(id){return document.getElementById(id)}
+function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',2200)}
+function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'})}
+function save(){try{localStorage.setItem('buzzpost',JSON.stringify({base:$('baseText').value,cta:$('cta').value,link:$('link').value,nets:state.nets,obj:state.obj,tone:state.tone}))}catch{}}
+function load(){try{const s=JSON.parse(localStorage.getItem('buzzpost')||'{}');if(s.base)$('baseText').value=s.base;if(s.cta)$('cta').value=s.cta;if(s.link)$('link').value=s.link;if(s.nets)state.nets=s.nets;if(s.obj)state.obj=s.obj;if(s.tone)state.tone=s.tone;}catch{}}
+function renderNetworks(){
+ const box=$('networks');box.innerHTML='';
+ NETS.forEach(n=>{const d=document.createElement('div');d.className='net'+(state.nets.includes(n.id)?' active':'');d.innerHTML=`<div class="check">✓</div><div class="ico">${n.ico}</div><b>${n.name}</b><small>${n.limit} car. • ${n.style}</small>`;d.onclick=()=>{if(state.nets.includes(n.id))state.nets=state.nets.filter(x=>x!==n.id);else state.nets.push(n.id);save();renderAll()};box.appendChild(d)});
+ $('kNets').textContent=state.nets.length;
+ const est=state.nets.length*1350+($('baseText').value.length*7);
+ $('kReach').textContent=est.toLocaleString('es')+'+';
+ $('reachBar').style.width=Math.min(100,state.nets.length*14)+'%';
+ $('reachTxt').textContent=`Alcance estimado: ${est.toLocaleString('es')}+ personas si publicas en ${state.nets.length} redes con imagen + hashtags.`;
+ const hours=['9:00','12:30','18:00','20:30'];$('bestTime').textContent=`📊 Mejor hora hoy para tu nicho: ${hours[new Date().getDate()%hours.length]} y 20:30 (pico de Instagram/TikTok en ES/LATAM). Publica Reel + historia a esa hora.`;
+ $('kTime').textContent='~'+(state.nets.length*40)+'s';
+}
+function renderPickers(){
+ $('objRow').innerHTML='';OBJECTIVES.forEach(o=>{const b=document.createElement('button');b.className='pick'+(state.obj===o?' active':'');b.textContent=o;b.onclick=()=>{state.obj=o;save();renderPickers()};$('objRow').appendChild(b)});
+ $('toneRow').innerHTML='';TONES.forEach(o=>{const b=document.createElement('button');b.className='pick'+(state.tone===o?' active':'');b.textContent=o;b.onclick=()=>{state.tone=o;save();renderPickers()};$('toneRow').appendChild(b)});
+ $('emojiRow').innerHTML='';EMOJIS.forEach(e=>{const s=document.createElement('span');s.textContent=e;s.onclick=()=>{insertAtCursor($('baseText'),e)};$('emojiRow').appendChild(s)});
+}
+function insertAtCursor(el,txt){const s=el.selectionStart||el.value.length;el.value=el.value.slice(0,s)+txt+el.value.slice(el.selectionEnd||s);el.focus();autoAdapt()}
+let curTab='instagram';
+function adaptFor(net,base,cta,link){
+ let t=base.trim()||'¡Gran noticia! 🎉';
+ const tonePre={'🔥 Urgente':'🚨 ¡ÚLTIMAS HORAS! ','😊 Amable':'Hola, comunidad 💛 ','😎 Divertido':'😎 Esto te va a encantar: ','💼 Pro':'📌 Dato profesional: ','💖 Emocional':'💖 De corazón, gracias por estar aquí. '}[state.tone]||'';
+ const objTag={'Vender':'🛒','Lanzar':'🚀','Sorteo':'🎁 SORTEO','Evento':'📅 EVENTO','Visitas':'🌐','Seguidores':'🤝'}[state.obj]||'✨';
+ let head=`${tonePre}${objTag} — `;
+ let core=head+t;
+ if(net==='x'){core=`${tonePre}${t}`;if(cta)core+=` ${cta}`;if(link)core+=` ${link}`;if(core.length>260)core=core.slice(0,257)+'…';return core}
+ if(net==='linkedin'){let prof=core+`\n\n👉 ${cta||'Te leo en comentarios.'}`;if(link)prof+=`\n🔗 ${link}`;prof+=`\n\n#Marketing #Negocios #Emprendimiento`;return prof.slice(0,3000)}
+ if(net==='instagram'||net==='facebook'){let r=`✨ ${core}\n\n${cta||''}`;if(link&&(net==='facebook'))r+=`\n👉 ${link}`;if(net==='instagram')r+=`\n🔗 Link en bio 👆`;return r.slice(0,net==='instagram'?2200:60000)}
+ if(net==='tiktok'||net==='threads'){return `🎬 POV: ${t}\n\n${cta} ${link||''}\n#parati #viral`.slice(0,2200)}
+ return `${core}\n\n${cta} ${link||''}`.slice(0,4000);
+}
+function autoAdapt(){
+ save();
+ NETS.forEach(n=>{state.adapted[n.id]=adaptFor(n.id,$('baseText').value,$('cta').value,$('link').value)});
+ if(!state.nets.includes(curTab))curTab=state.nets[0]||'instagram';
+ renderPreview();renderNetworks();
+}
+function renderPreview(){
+ const tabs=$('tabs');tabs.innerHTML='';
+ state.nets.forEach(id=>{const n=NETS.find(x=>x.id===id);const b=document.createElement('div');b.className='tab'+(curTab===id?' active':'');b.textContent=n.ico+' '+n.name;b.onclick=()=>{curTab=id;renderPreview()};tabs.appendChild(b)});
+ const n=NETS.find(x=>x.id===curTab)||NETS[0];
+ const txt=state.adapted[n.id]??adaptFor(n.id,$('baseText').value,$('cta').value,$('link').value);
+ $('adapted').value=txt;
+ $('adapted').oninput=e=>{state.adapted[curTab]=e.target.value;renderPvText()};
+ $('pvName').textContent='Mi Negocio • '+state.obj;
+ $('pvNet').textContent=n.name+' • ahora mismo';
+ $('pvAvatar').textContent=n.ico;
+ $('netTip').textContent='💡 '+n.tip+` Límite: ${n.limit} caracteres.`;
+ renderPvText();
+ const sg=$('shareGrid');sg.innerHTML='';
+ state.nets.forEach(id=>{const m=NETS.find(x=>x.id===id);const a=document.createElement('a');a.className='share-btn';a.target='_blank';a.rel='noopener';a.href=m.share(state.adapted[id]||'');a.innerHTML=`<span style="font-size:22px">${m.ico}</span><span>Publicar en ${m.name}<br><small style="color:var(--mut);font-weight:400">Se abre con tu texto listo</small></span>`;sg.appendChild(a)});
+}
+function renderPvText(){
+ const n=NETS.find(x=>x.id===curTab);const txt=$('adapted').value;
+ $('pvText').textContent=txt;
+ const pct=Math.min(100,txt.length/n.limit*100);
+ $('pvBar').style.width=pct+'%';$('pvBar').style.background=txt.length>n.limit?'#ef4444':'';
+ const c=$('pvCount');c.textContent=`${txt.length} / ${n.limit} caracteres (${Math.round(pct)}%)`;c.classList.toggle('over',txt.length>n.limit);
+ if(state.uploaded||true){$('pvImgWrap').style.display='block';$('pvImg').src=$('creative').toDataURL()}
+}
+function generateCopies(){
+ const base=$('baseText').value.trim();
+ if(!base){quickDemo();return}
+ const hooks=[`🚨 Nadie te contó esto: ${base}`,`✨ En 15 segundos: ${base}`,`🔥 Si haces esto te ahorras dinero: ${base}`];
+ $('baseText').value=hooks[Math.floor(Math.random()*hooks.length)]+`\n\n${$('cta').value} ${$('link').value}`.trim();
+ autoAdapt();toast('✨ Texto optimizado para todas las redes');
+}
+function generateHashtags(){
+ const base=(($('baseText').value)+' '+state.obj).toLowerCase();
+ const pool=['marketing','emprendimiento','oferta','ventas','negocio','tiendaonline','descuento','viral','tendencia','pymes','instagram','tiktok','verano','lanzamiento','sorteo','evento','tips','crecimiento'];
+ let picks=[...new Set(pool.filter(w=>base.includes(w.slice(0,4))))].slice(0,8);
+ while(picks.length<10)picks.push(pool[Math.floor(Math.random()*pool.length)]);
+ picks=[...new Set(picks)].slice(0,12);
+ const box=$('hashtagBox');box.innerHTML='';
+ picks.forEach(h=>{const c=document.createElement('span');c.className='chip';c.textContent='#'+h;c.onclick=()=>{insertAtCursor($('baseText'),' #'+h)};box.appendChild(c)});
+ toast('#️⃣ Toca un hashtag para añadirlo');
+}
+function copyMaster(){navigator.clipboard.writeText($('baseText').value).then(()=>toast('📋 Copiado'))}
+function copyAdapted(){navigator.clipboard.writeText($('adapted').value).then(()=>toast('📋 Texto de '+curTab+' copiado'))}
+function openShare(){const n=NETS.find(x=>x.id===curTab);window.open(n.share($('adapted').value),'_blank')}
+function copyAll(){const kit=state.nets.map(id=>{const n=NETS.find(x=>x.id===id);return `--- ${n.name.toUpperCase()} ---\n${state.adapted[id]||''}`}).join('\n\n');navigator.clipboard.writeText(kit).then(()=>toast('📦 Kit completo copiado'))}
+function simulatePublish(){
+ const bar=$('simBar'),wrap=$('simProg');wrap.style.display='block';let p=0;
+ const iv=setInterval(()=>{p+=12+Math.random()*18;if(p>=100){p=100;clearInterval(iv);addHistory(`Publicación masiva en ${state.nets.length} redes`,'✅ Publicado');toast('🚀 ¡Publicado en '+state.nets.length+' redes! (simulado)')}bar.style.width=p+'%'},300);
+}
+function getHistory(){try{return JSON.parse(localStorage.getItem('buzzhist')||'[]')}catch{return[]}}
+function addHistory(title,status){const h=getHistory();h.unshift({t:new Date().toLocaleString('es'),title,status,camp:$('campName').value||state.obj});localStorage.setItem('buzzhist',JSON.stringify(h.slice(0,20)));renderHistory()}
+function schedule(){const w=$('schedWhen').value||'Mañana 18:00';addHistory(`Programado: ${$('campName').value||state.obj} → ${w} en ${state.nets.length} redes`,'⏰ En cola');toast('📅 Añadido a la cola')}
+function clearHistory(){localStorage.removeItem('buzzhist');renderHistory()}
+function renderHistory(){const h=getHistory();$('history').innerHTML=h.length?`<table><tr><th>Fecha</th><th>Campaña</th><th>Estado</th></tr>${h.map(x=>`<tr><td>${x.t}</td><td>${x.title}</td><td>${x.status}</td></tr>`).join('')}</table>`:'<div class="history-empty">Aún no hay publicaciones.<br>Crea tu primera campaña arriba 👆</div>'}
+// --- Creative canvas ---
+const TPLS=[
+ {n:'Neón Ventas',bg:['#7c3aed','#ec4899'],fg:'#fff'},
+ {n:'Sol Oferta',bg:['#f59e0b','#ef4444'],fg:'#fff'},
+ {n:'Pro Negocio',bg:['#0f172a','#334155'],fg:'#fff'},
+ {n:'Fresh Verde',bg:['#059669','#a3e635'],fg:'#fff'},
+];
+function renderTpls(){const r=$('tplRow');r.innerHTML='';TPLS.forEach((t,i)=>{const d=document.createElement('div');d.className='tpl'+(state.tpl===i?' active':'');d.innerHTML=`<canvas width="200" height="200" data-i="${i}"></canvas><p>${t.n}</p>`;d.onclick=()=>{state.tpl=i;renderTpls();drawCreative()};r.appendChild(d);miniPaint(d.querySelector('canvas'),t)})}
+function miniPaint(c,t){const x=c.getContext('2d');const g=x.createLinearGradient(0,0,200,200);g.addColorStop(0,t.bg[0]);g.addColorStop(1,t.bg[1]);x.fillStyle=g;x.fillRect(0,0,200,200);x.fillStyle='#ffffff30';x.beginPath();x.arc(150,50,70,0,7);x.fill();x.fillStyle='#fff';x.font='bold 26px sans-serif';x.fillText('20%',60,100);x.font='14px sans-serif';x.fillText('- OFERTA -',60,125)}
+function drawCreative(){
+ const t=TPLS[state.tpl];const c=$('creative');const x=c.getContext('2d');
+ const g=x.createLinearGradient(0,0,800,800);g.addColorStop(0,t.bg[0]);g.addColorStop(1,t.bg[1]);
+ x.fillStyle=g;x.fillRect(0,0,800,800);
+ x.fillStyle='#ffffff22';x.beginPath();x.arc(650,150,220,0,7);x.fill();x.beginPath();x.arc(100,700,260,0,7);x.fill();
+ x.fillStyle='#ffffff';x.font='900 84px Inter,Arial';x.textAlign='center';
+ wrapText(x,$('creativeTitle').value||'¡OFERTA!',400,340,700,90);
+ x.font='500 38px Inter,Arial';x.fillStyle='#ffffffdd';wrapText(x,$('creativeSub').value||'',400,520,640,44);
+ x.font='700 30px Inter,Arial';x.fillStyle='#111';roundRect(x,240,600,320,70,35);x.fillStyle='#fff';x.fillText('⚡ BuzzPost',400,645);
+ x.fillStyle='#ffffffaa';x.font='24px Inter,Arial';x.fillText($('link').value||'mi-negocio.com',400,730);
+ if(state.uploaded){const img=new Image();img.onload=()=>{x.save();x.beginPath();x.arc(400,180,70,0,7);x.clip();x.drawImage(img,330,110,140,140);x.restore()};img.src=state.uploaded}
+ renderPvText();
+}
+function wrapText(x,text,cx,y,maxW,lh){const words=text.split(' ');let line='',yy=y;for(const w of words){const t=line?line+' '+w:w;if(x.measureText(t).width>maxW){x.fillText(line,cx,yy);line=w;yy+=lh}else line=t}x.fillText(line,cx,yy)}
+function roundRect(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath();x.fill()}
+function downloadCreative(){const a=document.createElement('a');a.download='buzzpost-creatividad.png';a.href=$('creative').toDataURL('image/png');a.click();toast('⬇️ Imagen descargada')}
+function quickDemo(){$('baseText').value='Lanzamos la Colección Verano ☀️ con 20% de descuento solo esta semana. Envío gratis + regalo sorpresa en pedidos hoy.';$('cta').value='🛒 Compra ahora antes de que se agote 👇';$('link').value='https://mi-negocio.com/verano';autoAdapt();drawCreative();scrollToId('composer');toast('✨ Demo cargada: edítala y publica')}
+$('upload').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{state.uploaded=r.result;drawCreative()};r.readAsDataURL(f)});
+['baseText','cta','link'].forEach(id=>$(id).addEventListener('input',autoAdapt));
+function renderAll(){renderNetworks();renderPickers();renderPreview();renderHistory()}
+load();renderTpls();
+if(!$('baseText').value)$('baseText').value='';
+autoAdapt();drawCreative();renderAll();
+</script>
+</body>
+</html>
