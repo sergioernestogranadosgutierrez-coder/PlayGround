@@ -660,6 +660,57 @@ function armTimers() {
   } catch {}
 }
 
+// ---------- marketing pro: contadores, FAQ, planes, contacto ----------
+// Contadores animados del hero (convierten por prueba social)
+try {
+  const cio = new IntersectionObserver((es) => es.forEach((e) => {
+    if (!e.isIntersecting) return;
+    const el = e.target; cio.unobserve(el);
+    const to = +el.dataset.to || 0; const t0 = Date.now();
+    const step = () => { const p = Math.min(1, (Date.now() - t0) / 1200); el.textContent = Math.round(to * p).toLocaleString("es"); if (p < 1) requestAnimationFrame(step); };
+    step();
+  }), { threshold: 0.4 });
+  $$(".countup").forEach((el) => cio.observe(el));
+} catch {}
+// FAQ acordeón (resuelve objeciones)
+$$(".faq-q").forEach((b) => b.addEventListener("click", () => {
+  const a = b.nextElementSibling;
+  const open = a && a.classList.contains("open");
+  $$(".faq-a").forEach((x) => x.classList.remove("open"));
+  $$(".faq-q span").forEach((s) => (s.textContent = "+"));
+  if (a && !open) { a.classList.add("open"); b.querySelector("span").textContent = "−"; }
+}));
+// Planes → llevan al contacto con interés preseleccionado
+$$("[data-plan]").forEach((b) => b.addEventListener("click", () => {
+  const sel = $("#ctInteres");
+  if (sel && b.dataset.plan === "Gratis") { $("#ctNombre").focus(); toast("Empieza gratis: llena el formulario y listo"); }
+  else if (sel) { sel.value = b.dataset.plan === "Agencia" ? "Soy agencia (5+ marcas)" : "Quiero contratar el Plan Pro"; }
+  document.querySelector("#contacto").scrollIntoView({ behavior: "smooth" });
+  audit("Clic en plan " + b.dataset.plan);
+}));
+// Formulario contratar / solicitar info
+function renderLeads() {
+  const l = store.get("bz_leads", []);
+  $("#leadCount").textContent = l.length;
+  $("#leadList").innerHTML = l.length ? "" : `<li class="muted">Aún no envías ninguna.</li>`;
+  l.slice(0, 10).forEach((c) => { const li = document.createElement("li"); li.innerHTML = `<span>💬 <b>${escapeHtml(c.nombre)}</b> · ${escapeHtml(c.interes)}<br><small>${escapeHtml(c.contacto)} · ${c.fecha}</small></span>`; $("#leadList").appendChild(li); });
+}
+$("#btnContacto").addEventListener("click", async () => {
+  const nombre = $("#ctNombre").value.trim(), contacto = $("#ctContacto").value.trim();
+  const interes = $("#ctInteres").value;
+  if (nombre.length < 2 || contacto.length < 5) return toast("Escribe tu nombre y tu WhatsApp o email");
+  const l = store.get("bz_leads", []);
+  l.unshift({ nombre, contacto, interes, fecha: new Date().toLocaleString("es") });
+  store.set("bz_leads", l.slice(0, 50));
+  renderLeads();
+  audit(`Nuevo lead: ${nombre} (${interes})`);
+  const msg = `Hola BuzzPost, soy ${nombre}. Me interesa: ${interes}. Mi contacto: ${contacto}`;
+  await navigator.clipboard.writeText(msg).catch(() => {});
+  toast("✅ Solicitud guardada. Se abre WhatsApp…");
+  try { window.open("https://wa.me/?text=" + enc(msg), "_blank"); } catch {}
+});
+try { $("#footYear").textContent = new Date().getFullYear(); } catch {}
+
 // ---------- init ----------
-function renderAll() { renderConns(); renderApr(); renderCal(); renderInbox(); drawChart(); renderAudit(); renderIdeas(); renderCnQueue(); renderCnStats(); armTimers(); try { const k = $("#inAIKey"); if (k) k.value = localStorage.getItem("bz_ai_key") || ""; } catch {} const mj = store.get("bz_mej", []); if (mj.length) $("#mejorasList").innerHTML = mj.map((x) => `<li>🧠 ${escapeHtml(x)}</li>`).join(""); }
+function renderAll() { renderConns(); renderApr(); renderCal(); renderInbox(); drawChart(); renderAudit(); renderIdeas(); renderCnQueue(); renderCnStats(); renderLeads(); armTimers(); try { const k = $("#inAIKey"); if (k) k.value = localStorage.getItem("bz_ai_key") || ""; } catch {} const mj = store.get("bz_mej", []); if (mj.length) $("#mejorasList").innerHTML = mj.map((x) => `<li>🧠 ${escapeHtml(x)}</li>`).join(""); }
 renderAll();

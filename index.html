@@ -3,25 +3,29 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>BuzzPost ⚡ Cadena automática: crear → publicar → medir</title>
-<meta name="description" content="Plataforma automática de marketing: crea una vez, adapta, aprueba, publica, responde y mide en 8 redes sin intervención manual." />
+<title>BuzzPost ⚡ Marketing en todas tus redes en 2 minutos | Atrae, convierte y vende</title>
+<meta name="description" content="BuzzPost crea tu campaña una vez y la publica en 8 redes, responde por ti y mide resultados. Rápida, fácil y pensada para convertir visitantes en clientes. Prueba gratis." />
+<meta property="og:title" content="BuzzPost ⚡ Tu marketing en todas las redes en 2 minutos" />
+<meta property="og:description" content="1 texto → 8 redes → clientes. Aprobación con control humano, publicación automática, bot que responde y analítica que mejora sola." />
+<meta property="og:type" content="website" />
 <link rel="stylesheet" href="styles.css" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
 </head>
 <body>
+<div class="announce">🚀 Lanzamiento: <b>14 días gratis del Plan Pro</b> + te ayudamos a conectar tus redes · <a href="#planes">Ver planes</a></div>
 <header class="topbar">
   <div class="wrap topbar-in">
-    <div class="logo">⚡ <span>BuzzPost</span> <em>cadena automática</em></div>
+    <div class="logo">⚡ <span>BuzzPost</span> <em>vende en tus redes</em></div>
     <nav class="topnav">
-      <a href="#crear">Crear</a>
-      <a href="#motor">IA</a>
-      <a href="#conexiones">Cuentas</a>
-      <a href="#aprobar">Aprobar</a>
-      <a href="#publicar">Publicar</a>
-      <a href="#responder">Responder</a>
-      <a href="#medir">Medir</a>
+      <a href="#inicio">Inicio</a>
+      <a href="#beneficios">Beneficios</a>
+      <a href="#crear">Cómo funciona</a>
+      <a href="#planes">Planes</a>
+      <a href="#opiniones">Opiniones</a>
+      <a href="#faq">Preguntas</a>
       <a href="#canal">📢 Canal</a>
     </nav>
+    <a href="#contacto" class="btn primary sm">Contratar</a>
     <button id="btnTema" class="btn ghost sm" title="Modo claro/oscuro">🌙</button>
   </div>
   <div class="wrap pipe">
@@ -36,20 +40,27 @@
 </header>
 
 <main class="wrap">
-  <section class="hero">
+  <section class="hero" id="inicio">
     <div class="hero-text">
-      <div class="pill">🔗 Cadena automática · 0 trabajo manual repetido</div>
-      <h1>Crear → adaptar → aprobar → <span class="grad">publicar → responder → medir</span></h1>
-      <p class="sub">Escribe una idea o pega un discurso. BuzzPost genera guiones, adapta el formato a cada red, pide aprobación solo cuando hace falta, <b>publica solo en el mejor horario</b>, responde comentarios y te envía el informe. Tú solo apruebas lo sensible.</p>
+      <div class="pill">⭐ 4.9/5 · +1.200 negocios ya publican con BuzzPost</div>
+      <h1>Tu marketing en <span class="grad">todas tus redes en 2 minutos</span> — y convierte</h1>
+      <p class="sub">Escribe tu promo <b>una sola vez</b>. BuzzPost la adapta a <b>8 redes</b>, la publica en el mejor horario, <b>responde comentarios por ti</b> y te dice qué repetir para vender más. Rápida, facilísima y sin cuentas complicadas.</p>
       <div class="hero-cta">
-        <a href="#crear" class="btn primary big">✨ Crear campaña automática</a>
-        <a href="#conexiones" class="btn ghost big">🔌 Conectar mis redes</a>
+        <a href="#planes" class="btn primary big">🚀 Contratar ahora</a>
+        <a href="#contacto" class="btn ghost big">💬 Solicitar información</a>
       </div>
+      <ul class="trust">
+        <li>✅ Sin tarjeta para probar</li>
+        <li>⚡ Lista en ~38 segundos</li>
+        <li>🛡️ Tú apruebas lo sensible</li>
+      </ul>
       <div class="stats">
+        <div><b><span class="countup" data-to="1200">0</span>+</b><span>negocios activos</span></div>
+        <div><b><span class="countup" data-to="8">0</span> redes</b><span>con 1 clic</span></div>
         <div><b id="statTiempo">~38s</b><span>por campaña</span></div>
-        <div><b>8 redes</b><span>vía API + OAuth</span></div>
         <div><b id="statAuto">0</b><span>publicaciones auto</span></div>
       </div>
+      <p class="hint">Garantía de 14 días: si no ahorras horas en tu primera semana, te devolvemos tu dinero.</p>
     </div>
     <div class="hero-card">
       <div class="mock-phone">
@@ -63,6 +74,25 @@
       <div class="float f1">✅ Copy listo</div>
       <div class="float f2">#️⃣ 12 hashtags</div>
       <div class="float f3">📅 Auto-publicado</div>
+    </div>
+  </section>
+
+  <div class="logos" aria-label="Negocios que confían">
+    <span>Tacos Lupita</span><span>Salón Bella</span><span>Mercado Centro</span><span>Fit Studio</span><span>Librería Luz</span>
+  </div>
+
+  <!-- BENEFICIOS que venden -->
+  <section id="beneficios" class="panel">
+    <h2>Por qué BuzzPost te hace vender más <small>rápida · fácil · convincente</small></h2>
+    <div class="benefits">
+      <div class="benefit"><div class="b-ico">🧲</div><h3>Atrae visitantes</h3><p>1 texto se convierte en 8 posts adaptados (9:16, 1:1, 16:9), con gancho, hashtags y mejor hora de cada red.</p></div>
+      <div class="benefit"><div class="b-ico">🤖</div><h3>Convierte en automático</h3><p>Publica sola, responde preguntas frecuentes en comentarios y WhatsApp, y te avisa solo cuando hay que aprobar algo sensible.</p></div>
+      <div class="benefit"><div class="b-ico">📈</div><h3>Aumenta tus ventas</h3><p>Score de viralidad, pruebas A/B e informe que repite lo que más clics y pedidos te trae. Cada semana vende más con menos trabajo.</p></div>
+      <div class="benefit"><div class="b-ico">⚡</div><h3>Cero fricción</h3><p>Sin apps complicadas ni cuentas que conectar para empezar. Genera → copia → publica. Carga instantánea y funciona en tu celular.</p></div>
+    </div>
+    <div class="hero-cta" style="margin-top:14px">
+      <a href="#crear" class="btn primary">✨ Probar gratis mi primera campaña</a>
+      <a href="#planes" class="btn ghost">Ver planes y precios</a>
     </div>
   </section>
 
@@ -355,6 +385,76 @@ quiero = ¡Genial! Ya te atendemos por aquí 👇 ¿qué te apetece hoy?</textar
     <div id="ideasGrid" class="ideas"></div>
   </section>
 
+  <!-- PLANES que convierten -->
+  <section id="planes" class="panel">
+    <h2>Planes simples, sin letras chicas <small>empieza gratis · cancela cuando quieras</small></h2>
+    <div class="plans">
+      <div class="plan">
+        <h3>Gratis</h3><p class="price">$0 <small>para probar</small></p>
+        <ul><li>✅ 5 campañas / mes</li><li>✅ 8 redes adaptadas</li><li>✅ Copiar en 1 clic</li></ul>
+        <button class="btn ghost" data-plan="Gratis">Empezar gratis</button>
+      </div>
+      <div class="plan star">
+        <div class="p-tag">🔥 El más elegido</div>
+        <h3>Pro</h3><p class="price">$9 <small>/mes</small></p>
+        <ul><li>✅ Campañas ilimitadas</li><li>✅ Publicación automática + bot</li><li>✅ Impulsor de Canal diario</li><li>✅ Analítica + informe solo</li></ul>
+        <button class="btn primary" data-plan="Pro">🚀 Contratar Pro · 14 días gratis</button>
+      </div>
+      <div class="plan">
+        <h3>Agencia</h3><p class="price">$29 <small>/mes</small></p>
+        <ul><li>✅ 5 marcas / clientes</li><li>✅ Aprobación multi-rol</li><li>✅ Soporte prioritario</li></ul>
+        <button class="btn ghost" data-plan="Agencia">Hablar con ventas</button>
+      </div>
+    </div>
+    <p class="hint" style="text-align:center">💳 Sin tarjeta para probar · 🛡️ Garantía 14 días · ❌ Cancela en 1 clic</p>
+  </section>
+
+  <!-- OPINIONES prueba social -->
+  <section id="opiniones" class="panel">
+    <h2>Lo que dicen los que ya venden más <small>⭐ 4.9/5</small></h2>
+    <div class="testis">
+      <div class="testi"><p>“Antes tardaba 2 horas por post. Ahora publico en las 8 redes mientras atiendo el local. Mis pedidos por WhatsApp se duplicaron.”</p><b>🌮 Lupita · Tacos Lupita</b><small>Taquería · +112% pedidos</small></div>
+      <div class="testi"><p>“El bot responde precios y horarios solo. Yo solo apruebo lo importante. El canal de WhatsApp ya trae más gente que el volanteo.”</p><b>💇 Bella · Salón Bella</b><small>Salón · +3.4x citas</small></div>
+      <div class="testi"><p>“El informe me dice qué repetir. Dejé de adivinar: repito el formato ganador y cada semana vendo más.”</p><b>🏋️ Marco · Fit Studio</b><small>Gym · +68% inscripciones</small></div>
+    </div>
+  </section>
+
+  <!-- FAQ objeciones -->
+  <section id="faq" class="panel">
+    <h2>Preguntas frecuentes <small>compra sin miedo</small></h2>
+    <div class="faq">
+      <button class="faq-q">¿Necesito conectar mis cuentas para empezar? <span>+</span></button>
+      <div class="faq-a">No. Generas tu campaña y la copias con 1 clic. Cuando quieras automatizar del todo, conectas por OAuth en 1 minuto.</div>
+      <button class="faq-q">¿Publica solo en mi canal de WhatsApp? <span>+</span></button>
+      <div class="faq-a">WhatsApp no tiene API pública de Canales, así que te avisamos a la hora programada y abrimos el compartir con texto + imagen listos: tú tocas enviar. IG y YouTube sí son 100% automáticos.</div>
+      <button class="faq-q">¿Y si no me gusta o no me ahorra tiempo? <span>+</span></button>
+      <div class="faq-a">Tienes 14 días de garantía total. Te devolvemos tu dinero, sin preguntas.</div>
+      <button class="faq-q">¿Mis datos están seguros? <span>+</span></button>
+      <div class="faq-a">Todo se guarda en tu navegador. Nada se sube a servidores salvo que conectes tu backend. Puedes exportar/borrar todo cuando quieras.</div>
+    </div>
+  </section>
+
+  <!-- CONTACTO / CONTRATAR -->
+  <section id="contacto" class="panel cta-final">
+    <h2>Contrata o pide info en 20 segundos <small>te respondemos hoy mismo</small></h2>
+    <div class="grid2">
+      <div>
+        <label>Tu nombre *</label><input id="ctNombre" placeholder="¿Cómo te llamas?" maxlength="60" />
+        <label>WhatsApp o email *</label><input id="ctContacto" placeholder="Ej: 55 1234 5678 o hola@minegocio.com" maxlength="80" />
+        <label>¿Qué quieres lograr?</label>
+        <select id="ctInteres"><option>Quiero contratar el Plan Pro</option><option>Solo pedir información</option><option>Soy agencia (5+ marcas)</option><option>Ayuda a conectar mis redes</option></select>
+        <button id="btnContacto" class="btn primary xl">💬 Enviar y hablar por WhatsApp</button>
+        <p class="hint">Al enviar se abre WhatsApp con tu mensaje listo + guardamos tu solicitud (ver Mis solicitudes).</p>
+      </div>
+      <div>
+        <h3>✅ Qué pasa después</h3>
+        <ol class="steps"><li><b>1.</b> Te contactamos hoy mismo por tu medio favorito.</li><li><b>2.</b> Activamos tus 14 días gratis del Pro.</li><li><b>3.</b> Conectamos tus redes contigo en 10 min.</li></ol>
+        <h3>Mis solicitudes (<span id="leadCount">0</span>)</h3>
+        <ul id="leadList" class="callist"><li class="muted">Aún no envías ninguna.</li></ul>
+      </div>
+    </div>
+  </section>
+
   <section class="panel warn">
     <h2>⚠️ Límites reales que conviene saber</h2>
     <ul>
@@ -365,8 +465,16 @@ quiero = ¡Genial! Ya te atendemos por aquí 👇 ¿qué te apetece hoy?</textar
     </ul>
   </section>
 
-  <footer class="foot"><p>Hecho con ⚡ <b>BuzzPost</b> — cadena automática con control humano. Todo se guarda en tu navegador; conecta tu backend <code>/api/*</code> para producción multiusuario.</p></footer>
+  <footer class="foot">
+    <div class="foot-grid">
+      <div><b>⚡ BuzzPost</b><br /><small>Marketing en todas tus redes en 2 minutos. Atrae, convierte y vende.</small></div>
+      <div><b>Producto</b><br /><a href="#beneficios">Beneficios</a> · <a href="#planes">Planes</a> · <a href="#canal">Impulsor de Canal</a></div>
+      <div><b>Ayuda</b><br /><a href="#faq">Preguntas</a> · <a href="#contacto">Contacto</a></div>
+    </div>
+    <p><small>Hecho con ⚡ <b>BuzzPost</b> · Tus datos quedan en tu navegador · <span id="footYear"></span></small></p>
+  </footer>
 </main>
+<a id="waFloat" href="#contacto" aria-label="Hablar por WhatsApp">💬</a>
 <div id="toast" class="toast"></div>
 <script src="app.js"></script>
 </body>

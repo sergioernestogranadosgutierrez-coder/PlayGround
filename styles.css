@@ -133,4 +133,35 @@ code{background:#00000055;padding:1px 6px;border-radius:6px;font-size:12px}
 .cn-actions{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
 .statbar{height:8px;background:#22224d;border-radius:99px;overflow:hidden;margin-top:6px}
 .statbar i{display:block;height:100%;background:linear-gradient(90deg,var(--p1),var(--p2))}
-@media(max-width:860px){.hero,.grid2,.cards,.ideas{grid-template-columns:1fr}.topnav{display:none}.score{flex-direction:column;align-items:flex-start}.mock-phone{margin:0 auto}.conngrid{grid-template-columns:1fr 1fr}}
+/* ---- marketing pro ---- */
+.announce{background:linear-gradient(90deg,#ff3d81,#7c3aed);color:#fff;text-align:center;font-size:13.5px;font-weight:600;padding:8px 12px}
+.announce a{color:#fff;font-weight:900}
+.trust{list-style:none;display:flex;gap:12px;flex-wrap:wrap;padding:0;margin:12px 0;color:var(--txt);font-weight:700;font-size:13.5px}
+.logos{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:16px 0;opacity:.9}
+.logos span{border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:700;color:var(--mut);background:#12122a}
+body.light .logos span{background:#fff}
+.benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.benefit{background:#0f0f26;border:1px solid var(--line);border-radius:14px;padding:14px}
+body.light .benefit{background:#fbfaff}
+.b-ico{font-size:28px}.benefit h3{margin:8px 0 6px;font-size:16px}.benefit p{margin:0;color:var(--mut);font-size:13.5px;line-height:1.55}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.plan{background:#0f0f26;border:1px solid var(--line);border-radius:16px;padding:18px;text-align:center;position:relative}
+body.light .plan{background:#fff}
+.plan.star{border:2px solid var(--p1);transform:scale(1.03)}
+.p-tag{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--p1),var(--p2));color:#fff;font-size:12px;font-weight:800;padding:4px 12px;border-radius:99px}
+.price{font-size:34px;font-weight:900;margin:6px 0}.price small{font-size:14px;color:var(--mut)}
+.plan ul{list-style:none;padding:0;margin:10px 0 14px;text-align:left;font-size:13.5px;line-height:2}
+.testis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.testi{background:#0f0f26;border:1px solid var(--line);border-radius:14px;padding:14px;font-size:13.5px;line-height:1.6}
+body.light .testi{background:#fbfaff}
+.testi b{display:block;margin-top:8px}.testi small{color:var(--mut)}
+.faq-q{width:100%;text-align:left;background:#0f0f26;color:var(--txt);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-weight:800;font-size:14px;cursor:pointer;margin-top:8px;display:flex;justify-content:space-between;gap:10px}
+body.light .faq-q{background:#fff;color:#111}
+.faq-a{display:none;padding:10px 14px;color:var(--mut);font-size:13.5px;line-height:1.6}
+.faq-a.open{display:block}
+.cta-final{border:2px solid var(--p1)}
+.steps{line-height:2;font-size:14px;color:var(--mut)}
+.foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px;text-align:left;margin-bottom:10px}
+.foot-grid a{color:var(--mut);text-decoration:none;font-size:13px}
+#waFloat{position:fixed;right:18px;bottom:18px;width:56px;height:56px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;font-size:28px;text-decoration:none;box-shadow:0 12px 30px rgba(0,0,0,.4);z-index:40}
+@media(max-width:860px){.hero,.grid2,.cards,.ideas{grid-template-columns:1fr}.topnav{display:none}.score{flex-direction:column;align-items:flex-start}.mock-phone{margin:0 auto}.conngrid{grid-template-columns:1fr 1fr}.benefits,.plans,.testis{grid-template-columns:1fr}.plan.star{transform:none}.foot-grid{grid-template-columns:1fr}}
