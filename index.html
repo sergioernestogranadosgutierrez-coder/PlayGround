@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FusionAI — Claude + ChatGPT + Gemini en una App</title>
+<meta name="description" content="Chatea con Claude, ChatGPT y Gemini desde una sola app. Compara respuestas o fusiona la mejor de cada IA." />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="bg"></div>
+<header>
+  <div class="logo">◈ FusionAI</div>
+  <div class="subtitle">Claude · ChatGPT · Gemini — una sola app</div>
+  <div class="header-actions">
+    <span id="statusDot" class="status-dot demo" title="Estado"></span>
+    <span id="statusText" class="status-text">Modo demo</span>
+    <button id="btnKeys" class="btn small">🔑 API Keys</button>
+  </div>
+</header>
+
+<main class="layout">
+  <aside class="sidebar">
+    <section class="card">
+      <h2>1 · Elige IA</h2>
+      <div class="models">
+        <button class="model active" data-model="claude">
+          <span class="m-icon claude">C</span>
+          <span><b>Claude</b><i>Anthropic · código y razonamiento</i></span>
+        </button>
+        <button class="model" data-model="chatgpt">
+          <span class="m-icon gpt">G</span>
+          <span><b>ChatGPT</b><i>OpenAI · versátil y rápido</i></span>
+        </button>
+        <button class="model" data-model="gemini">
+          <span class="m-icon gem">✦</span>
+          <span><b>Gemini</b><i>Google · multimodal y web</i></span>
+        </button>
+        <button class="model fusion" data-model="fusion">
+          <span class="m-icon fus">◈</span>
+          <span><b>Fusión ×3</b><i>Pregunta a las 3 y compara</i></span>
+        </button>
+      </div>
+    </section>
+
+    <section class="card" id="keysCard">
+      <h2>2 · Tus claves <small>(se guardan solo en tu navegador)</small></h2>
+      <label>OpenAI <input id="keyOpenAI" type="password" placeholder="sk-..." autocomplete="off" /></label>
+      <label>Anthropic <input id="keyClaude" type="password" placeholder="sk-ant-..." autocomplete="off" /></label>
+      <label>Google AI <input id="keyGemini" type="password" placeholder="AIza..." autocomplete="off" /></label>
+      <div class="row">
+        <button id="btnSaveKeys" class="btn primary small">Guardar</button>
+        <button id="btnClearKeys" class="btn small ghost">Borrar</button>
+      </div>
+      <p class="hint">Sin claves la app funciona en <b>modo demo</b> (respuestas simuladas). Con claves llama directo a cada API desde tu navegador, sin servidor intermedio.</p>
+      <details>
+        <summary>¿Dónde consigo las claves?</summary>
+        <ul>
+          <li>ChatGPT: <code>platform.openai.com → API keys</code></li>
+          <li>Claude: <code>console.anthropic.com → API keys</code></li>
+          <li>Gemini: <code>aistudio.google.com → Get API key</code></li>
+        </ul>
+      </details>
+    </section>
+
+    <section class="card">
+      <h2>Opciones</h2>
+      <label class="check"><input type="checkbox" id="optSynthesis" checked /> En modo Fusión: generar síntesis final</label>
+      <div class="row">
+        <button id="btnExport" class="btn small">⬇ Exportar chat</button>
+        <button id="btnClear" class="btn small ghost">🗑 Limpiar</button>
+      </div>
+    </section>
+  </aside>
+
+  <section class="chat-wrap">
+    <div id="chat" class="chat"></div>
+    <div id="typing" class="typing hidden"><span></span><span></span><span></span></div>
+    <form id="form" class="composer">
+      <textarea id="input" rows="2" placeholder="Escribe a Claude, ChatGPT o Gemini… (Enter = enviar, Shift+Enter = salto)"></textarea>
+      <button type="submit" class="btn primary send">➤</button>
+    </form>
+    <p class="footer-hint">FusionAI no envía tus claves a ningún servidor propio. Todo va directo del navegador a OpenAI / Anthropic / Google.</p>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
