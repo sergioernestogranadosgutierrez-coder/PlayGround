@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OnceLabs — Plataforma de Audio IA (clon de ElevenLabs)</title>
+<meta name="description" content="Clon funcional de ElevenLabs: texto a voz, biblioteca de voces, efectos de sonido, voz a texto, doblaje y agentes. Gratis en el navegador con Web Speech API + opcional API de ElevenLabs." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,ital,wght@9..144,0,700;9..144,1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="banner">✨ Nuevo: modelo <b>Once v3</b> — el más expresivo · <button id="bannerBtn">Pruébalo ahora →</button></div>
+
+<header class="topbar">
+  <div class="brand" id="brandHome"><span class="logo">II</span><span class="brand-name">OnceLabs</span><span class="clone-tag">clon de ElevenLabs</span></div>
+  <nav class="topnav">
+    <button data-tab="tts">Plataforma</button>
+    <button data-tab="voices">Voces</button>
+    <button data-tab="sfx">Efectos</button>
+    <button data-tab="agents">Agentes</button>
+    <button id="pricingBtn">Precios</button>
+  </nav>
+  <div class="top-actions">
+    <div class="credits" title="Créditos locales (simulados)">◉ <span id="creditsNum">10.000</span> créditos</div>
+    <button class="btn ghost" id="apiKeyBtn">🔑 API key</button>
+    <button class="btn light" id="ctaBtn">Empezar gratis</button>
+    <div class="avatar">S</div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <p class="side-label">CREAR</p>
+    <button class="side-item active" data-tab="tts"><span>🔊</span> Texto a voz</button>
+    <button class="side-item" data-tab="changer"><span>🎙️</span> Cambiador de voz</button>
+    <button class="side-item" data-tab="sfx"><span>✨</span> Efectos de sonido</button>
+    <button class="side-item" data-tab="stt"><span>📝</span> Voz a texto</button>
+    <button class="side-item" data-tab="dubbing"><span>🌍</span> Doblaje</button>
+    <button class="side-item" data-tab="isolator"><span>🎧</span> Aislador de voz</button>
+    <button class="side-item" data-tab="agents"><span>🤖</span> Agentes</button>
+    <p class="side-label">BIBLIOTECA</p>
+    <button class="side-item" data-tab="voices"><span>👥</span> Biblioteca de voces</button>
+    <button class="side-item" data-tab="history"><span>🕘</span> Historial</button>
+    <button class="side-item" data-tab="api"><span>⚡</span> API & Claves</button>
+    <div class="side-card">
+      <b>Sin tarjeta · gratis</b>
+      <p>Reproducción ilimitada con voces del navegador. Conecta tu API key de ElevenLabs para MP3 reales.</p>
+      <button class="btn dark full" id="sideCta">Conectar ElevenLabs</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <!-- TTS -->
+    <section class="panel active" id="panel-tts">
+      <div class="studio-grid">
+        <div class="studio-main">
+          <div class="card">
+            <div class="card-head">
+              <h2>Texto a voz</h2>
+              <div class="seg">
+                <button class="seg-btn active">Editor</button>
+                <button class="seg-btn" id="ssmlBtn">SSML</button>
+              </div>
+            </div>
+            <textarea id="ttsText" maxlength="5000" placeholder="Escribe aquí o pega tu guion… Prueba: «Hola, soy una voz generada con inteligencia artificial. Puedo narrar vídeos, podcasts y audiolibros en más de 30 idiomas.»">Hola, bienvenido a OnceLabs, el clon abierto de ElevenLabs. Escribe cualquier texto, elige una voz y pulsa generar. Funciona gratis con las voces de tu navegador.</textarea>
+            <div class="textarea-foot"><span id="charCount">0 / 5.000</span><span id="costHint">≈ 0 créditos</span>
+              <span class="spacer"></span>
+              <button class="mini" id="sampleBtn">Probar ejemplo</button>
+              <button class="mini" id="clearBtn">Limpiar</button>
+              <label class="mini file">📎 Importar .txt <input type="file" id="txtFile" accept=".txt,.md" hidden></label>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>Elige una voz</h3>
+              <input id="voiceSearch" placeholder="Buscar voces… (ej. Rachel, grave, español)" />
+            </div>
+            <div class="voice-grid" id="voiceGrid"></div>
+          </div>
+
+          <div class="card player-card">
+            <div class="player-row">
+              <button class="btn dark big" id="generateBtn">▶ Generar voz</button>
+              <button class="btn ghost" id="stopBtn">⏹</button>
+              <button class="btn ghost" id="downloadBtn">⬇ MP3</button>
+              <div class="eq" id="eq"><i></i><i></i><i></i><i></i><i></i></div>
+              <span id="statusLine" class="status">Listo.</span>
+            </div>
+            <audio id="audioPlayer" controls style="width:100%;display:none"></audio>
+            <p class="hint">🔊 Sin API key: se reproduce al instante con la síntesis del navegador (gratis, sin servidor). Con API key de ElevenLabs: genera MP3 real de alta calidad y lo puedes descargar.</p>
+          </div>
+
+          <div class="card" id="historyMiniCard">
+            <div class="card-head"><h3>Generaciones recientes</h3><button class="mini" data-tab="history">Ver todo →</button></div>
+            <div id="historyMini" class="history-list"></div>
+          </div>
+        </div>
+
+        <div class="studio-side">
+          <div class="card">
+            <h3>Ajustes de voz</h3>
+            <label class="fld">Modelo
+              <select id="modelSel">
+                <option value="eleven_v3">Once v3 — más expresivo</option>
+                <option value="multilingual_v2" selected>Multilingual v2 — 32 idiomas</option>
+                <option value="turbo_v2">Turbo v2.5 — rapidísimo</option>
+                <option value="flash_v2">Flash v2.5 — latencia mínima</option>
+              </select>
+            </label>
+            <label class="fld">Idioma / acento
+              <select id="langSel">
+                <option value="es-ES">Español (España)</option>
+                <option value="es-MX">Español (México)</option>
+                <option value="en-US">English (US)</option>
+                <option value="en-GB">English (UK)</option>
+                <option value="fr-FR">Français</option>
+                <option value="pt-BR">Português</option>
+                <option value="de-DE">Deutsch</option>
+                <option value="it-IT">Italiano</option>
+              </select>
+            </label>
+            <div class="slider-row"><span>Estabilidad <b id="vStab">50%</b></span><input type="range" id="stability" min="0" max="100" value="50"></div>
+            <div class="slider-row"><span>Similitud <b id="vSim">75%</b></span><input type="range" id="similarity" min="0" max="100" value="75"></div>
+            <div class="slider-row"><span>Exagerar estilo <b id="vStyle">20%</b></span><input type="range" id="styleEx" min="0" max="100" value="20"></div>
+            <div class="slider-row"><span>Velocidad <b id="vSpeed">1.00×</b></span><input type="range" id="speed" min="50" max="150" value="100"></div>
+            <label class="check"><input type="checkbox" id="autoplay" checked> Reproducir automáticamente</label>
+          </div>
+          <div class="card dark-card">
+            <h3>⚡ Calidad ElevenLabs real</h3>
+            <p>Pega tu <b>xi-api-key</b> para usar las voces oficiales (Rachel, Drew, Clyde…) con MP3 descargable.</p>
+            <input id="apiKeyInput" type="password" placeholder="xi-api-key…" />
+            <button class="btn light full" id="saveKeyBtn">Guardar clave</button>
+            <a href="https://elevenlabs.io/app/settings/api-keys" target="_blank" rel="noopener">Conseguir clave gratis →</a>
+          </div>
+          <div class="card">
+            <h3>Consejos</h3>
+            <ul class="tips"><li>Añade <code>...</code> para pausas naturales.</li><li>Los signos <code>¿? ¡!</code> mejoran la entonación.</li><li>Para narración, estabilidad 40-60%.</li></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VOICES -->
+    <section class="panel" id="panel-voices">
+      <div class="page-head"><div><h2>Biblioteca de voces</h2><p>Colección curada estilo ElevenLabs. Pulsa ▶ para previsualizar, ＋ para usar en el estudio.</p></div>
+        <div class="filters"><button class="chip active" data-f="all">Todas</button><button class="chip" data-f="es">Español</button><button class="chip" data-f="en">English</button><button class="chip" data-f="Narr">Narración</button><button class="chip" data-f="Ads">Anuncios</button></div>
+      </div>
+      <div class="voice-lib" id="voiceLib"></div>
+      <div class="card"><h3>➕ Clonar tu voz (demo local)</h3><p>Graba 10 segundos y la añadimos a tu biblioteca local. La clonación neuronal real requiere la API de ElevenLabs (IVC).</p>
+        <div class="row"><button class="btn dark" id="cloneRecBtn">● Grabar muestra</button><input id="cloneName" placeholder="Nombre de tu voz…" /><button class="btn ghost" id="cloneAddBtn">Añadir a biblioteca</button></div>
+        <audio id="cloneAudio" controls style="display:none;width:100%"></audio>
+      </div>
+    </section>
+
+    <!-- CHANGER -->
+    <section class="panel" id="panel-changer">
+      <h2>Cambiador de voz</h2><p class="muted">Sube o graba un audio y transfórmalo con otra voz (demo local con cambio de tono + TTS; conversión neuronal con API key).</p>
+      <div class="two-col">
+        <div class="card"><h3>1 · Origen</h3><input type="file" id="changerFile" accept="audio/*"><button class="btn dark" id="changerRecBtn">● Grabar</button><audio id="changerSrc" controls style="width:100%"></audio></div>
+        <div class="card"><h3>2 · Voz destino</h3><select id="changerVoice"></select><label class="fld">Intensidad del cambio<input type="range" id="changerAmt" min="0" max="100" value="60"></label><button class="btn light" id="changerBtn" style="color:#000">Transformar</button><p class="hint" id="changerMsg">Demo local: ajusta pitch/rate y reproduce.</p></div>
+      </div>
+    </section>
+
+    <!-- SFX -->
+    <section class="panel" id="panel-sfx">
+      <h2>Efectos de sonido</h2><p class="muted">Describe un sonido y genéralo. Sin clave: síntesis WebAudio local. Con API key: Text-to-Sound-Effects real de ElevenLabs.</p>
+      <div class="card"><div class="row"><input id="sfxPrompt" placeholder="ej. Ola del mar chocando contra rocas, tormenta lejana…" style="flex:1"><select id="sfxDur"><option value="2">2s</option><option value="5" selected>5s</option><option value="10">10s</option></select><button class="btn dark big" id="sfxBtn">✨ Generar efecto</button></div>
+      <div class="chips" id="sfxIdeas"></div><audio id="sfxAudio" controls style="width:100%;display:none"></audio><p class="hint" id="sfxMsg"></p></div>
+    </section>
+
+    <!-- STT -->
+    <section class="panel" id="panel-stt">
+      <h2>Voz a texto</h2><p class="muted">Transcribe con el micrófono en vivo (Web Speech, gratis) o sube un audio para transcribir con ElevenLabs Scribe (requiere API key).</p>
+      <div class="two-col">
+        <div class="card"><h3>🎤 Dictado en vivo</h3><div class="row"><button class="btn dark" id="sttRecBtn">● Empezar dictado</button><select id="sttLang"><option value="es-ES">Español</option><option value="en-US">English</option></select></div><textarea id="sttOut" placeholder="Tu transcripción aparecerá aquí…"></textarea><div class="row"><button class="mini" id="sttCopy">Copiar</button><button class="mini" id="sttToTts">Enviar a Texto a voz →</button></div></div>
+        <div class="card"><h3>📁 Transcribir archivo (Scribe)</h3><input type="file" id="sttFile" accept="audio/*,video/*"><button class="btn ghost" id="sttFileBtn">Transcribir con ElevenLabs</button><p class="hint" id="sttMsg">Requiere API key. Modelo scribe_v1, 99 idiomas.</p></div>
+      </div>
+    </section>
+
+    <!-- DUBBING -->
+    <section class="panel" id="panel-dubbing">
+      <h2>Doblaje</h2><p class="muted">Flujo estilo ElevenLabs Dubbing: sube un vídeo/audio, elige idiomas y genera el doblaje (demo local + API real si hay clave).</p>
+      <div class="card"><div class="row"><input type="file" id="dubFile" accept="audio/*,video/*"><select id="dubLang"><option value="es">→ Español</option><option value="en">→ English</option><option value="fr">→ Français</option><option value="pt">→ Português</option></select><button class="btn dark" id="dubBtn">🌍 Doblar</button></div><p class="hint" id="dubMsg">Demo: transcribe el nombre del archivo y genera una muestra con la voz elegida.</p></div>
+    </section>
+
+    <!-- ISOLATOR -->
+    <section class="panel" id="panel-isolator">
+      <h2>Aislador de voz</h2><p class="muted">Sube un audio con ruido y escucha la versión procesada (demo con filtro paso-alto local; versión neuronal con API).</p>
+      <div class="card"><input type="file" id="isoFile" accept="audio/*"><button class="btn dark" id="isoBtn">🎧 Aislar voz</button><audio id="isoAudio" controls style="width:100%"></audio></div>
+    </section>
+
+    <!-- AGENTS -->
+    <section class="panel" id="panel-agents">
+      <h2>Agentes conversacionales</h2><p class="muted">Habla con un agente que responde con voz (demo con respuestas locales + TTS).</p>
+      <div class="card chat"><div id="chatLog" class="chat-log"><div class="msg bot">👋 Hola, soy <b>Nova</b>. Pregúntame lo que quieras y te respondo con voz.</div></div>
+      <div class="row"><input id="chatInput" placeholder="Escribe tu mensaje…" style="flex:1"><button class="btn dark" id="chatSend">Enviar</button><button class="btn ghost" id="chatVoice">🎤</button></div></div>
+    </section>
+
+    <!-- HISTORY -->
+    <section class="panel" id="panel-history">
+      <div class="page-head"><div><h2>Historial</h2><p>Guardado local en tu navegador.</p></div><button class="mini" id="clearHistory">Borrar todo</button></div>
+      <div id="historyFull" class="history-list"></div>
+    </section>
+
+    <!-- API -->
+    <section class="panel" id="panel-api">
+      <h2>API & claves</h2>
+      <div class="two-col">
+        <div class="card"><h3>Conexión ElevenLabs</h3><input id="apiKeyInput2" type="password" placeholder="xi-api-key…" /><button class="btn dark" id="saveKeyBtn2">Guardar</button><p class="hint" id="apiStatus">Sin clave: modo local gratuito.</p></div>
+        <div class="card"><h3>Ejemplo cURL</h3><pre id="curlExample">curl https://api.elevenlabs.io/v1/text-to-speech/VOICE_ID \
+  -H "xi-api-key: TU_CLAVE" -H "Content-Type: application/json" \
+  -d '{"text":"Hola mundo","model_id":"eleven_multilingual_v2"}' \
+  --output voz.mp3</pre><button class="mini" id="copyCurl">Copiar</button></div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="panel" id="panel-pricing">
+      <h2>Precios</h2>
+      <div class="price-grid">
+        <div class="card"><h3>Gratis</h3><p class="price">0 €</p><p>Ideal para probar · 10.000 créditos/mes</p><button class="btn ghost full">Plan actual</button></div>
+        <div class="card hi"><h3>Starter</h3><p class="price">5 €<span>/mes</span></p><p>30.000 créditos · voces + clonación</p><button class="btn light full" style="color:#000">Elegir Starter</button></div>
+        <div class="card"><h3>Creator</h3><p class="price">22 €<span>/mes</span></p><p>100.000 créditos · doblaje + agentes</p><button class="btn ghost full">Elegir Creator</button></div>
+      </div>
+    </section>
+
+    <footer class="foot">Hecho como clon educativo de ElevenLabs · TTS local via Web Speech API · Conecta tu xi-api-key para calidad oficial · <a href="https://elevenlabs.io" target="_blank" rel="noopener">elevenlabs.io</a></footer>
+  </main>
+</div>
+
+<div class="modal" id="apiModal"><div class="modal-card">
+  <h3>🔑 Conectar ElevenLabs</h3><p>Pega tu clave para desbloquear MP3 reales, clonación y Scribe. Se guarda solo en tu navegador (localStorage).</p>
+  <input id="apiKeyInput3" type="password" placeholder="xi-api-key…" />
+  <div class="row"><button class="btn dark" id="saveKeyBtn3">Guardar clave</button><button class="btn ghost" id="apiModalClose">Cerrar</button></div>
+</div></div>
+
+<script src="app.js"></script>
+</body>
+</html>
