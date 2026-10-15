@@ -5,11 +5,34 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>OnceLabs — Plataforma de Audio IA (clon de ElevenLabs)</title>
 <meta name="description" content="Clon funcional de ElevenLabs: texto a voz, biblioteca de voces, efectos de sonido, voz a texto, doblaje y agentes. Gratis en el navegador con Web Speech API + opcional API de ElevenLabs." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23c9b8ff'/><text x='50' y='68' font-size='52' font-family='Arial' font-weight='bold' text-anchor='middle' fill='%23000'>II</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,ital,wght@9..144,0,700;9..144,1,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body class="lobby-open">
+
+<div class="lobby" id="lobby" role="dialog" aria-label="Bienvenida">
+  <div class="lobby-bg" aria-hidden="true"><i class="orb o1"></i><i class="orb o2"></i><i class="orb o3"></i><i class="orb o4"></i></div>
+  <div class="lobby-inner">
+    <div class="lobby-mark"><span class="mark-glyph">II</span></div>
+    <p class="lobby-kicker">Estudio de voz con IA</p>
+    <h1 class="lobby-title">Once<span>Labs</span></h1>
+    <p class="lobby-sub">El clon profesional de ElevenLabs. 30 personajes actuados, síntesis fragmentada sin cortes y una interfaz lista para producción.</p>
+    <div class="lobby-stats">
+      <div><b>30</b><span>personajes</span></div>
+      <div><b>9</b><span>idiomas</span></div>
+      <div><b>0</b><span>ms de servidor</span></div>
+      <div><b>MP3</b><span>con API key</span></div>
+    </div>
+    <p class="lobby-preview-label">Escucha un adelanto — toca un personaje</p>
+    <div class="lobby-show" id="lobbyShow"></div>
+    <button class="btn light big enter-btn" id="enterBtn">Entrar al estudio <span aria-hidden="true">→</span></button>
+    <p class="lobby-meta">Gratis · Sin registro · Funciona 100% en tu navegador</p>
+  </div>
+  <div class="lobby-foot"><span>OnceLabs v2.0 · clon educativo de ElevenLabs</span><span>Síntesis fragmentada · respiración natural · motor neural preferente</span></div>
+</div>
+
 <div class="banner">✨ Nuevo: modelo <b>Once v3</b> — el más expresivo · <button id="bannerBtn">Pruébalo ahora →</button></div>
 
 <header class="topbar">
@@ -73,8 +96,11 @@
           </div>
 
           <div class="card">
-            <div class="card-head"><h3>Elige una voz</h3>
-              <input id="voiceSearch" placeholder="Buscar voces… (ej. Rachel, grave, español)" />
+            <div class="card-head"><h3>Elige tu personaje</h3>
+              <input id="voiceSearch" placeholder="Buscar… (pirata, robot, niño, grave, español)" />
+            </div>
+            <div class="type-row">
+              <button class="chip active" data-f="all">🎭 Todos</button><button class="chip" data-f="hombre">👨 Hombres</button><button class="chip" data-f="mujer">👩 Mujeres</button><button class="chip" data-f="nino">🧒 Niños</button><button class="chip" data-f="anciano">👴 Ancianos</button><button class="chip" data-f="heroe">🦸 Héroes</button><button class="chip" data-f="villano">🦹 Villanos</button><button class="chip" data-f="fantasia">🧝 Fantasía</button><button class="chip" data-f="robot">🤖 Robots</button><button class="chip" data-f="terror">😱 Terror</button>
             </div>
             <div class="voice-grid" id="voiceGrid"></div>
           </div>
@@ -84,11 +110,12 @@
               <button class="btn dark big" id="generateBtn">▶ Generar voz</button>
               <button class="btn ghost" id="stopBtn">⏹</button>
               <button class="btn ghost" id="downloadBtn">⬇ MP3</button>
-              <div class="eq" id="eq"><i></i><i></i><i></i><i></i><i></i></div>
-              <span id="statusLine" class="status">Listo.</span>
+              <div class="eq" id="eq" aria-hidden="true"></div>
+              <span class="engine" id="engineBadge" data-q="search">Buscando voces…</span>
             </div>
+            <div class="player-status"><div class="eq eq2" id="eq2" aria-hidden="true"></div><span id="statusLine" class="status">Listo para generar.</span></div>
             <audio id="audioPlayer" controls style="width:100%;display:none"></audio>
-            <p class="hint">🔊 Sin API key: se reproduce al instante con la síntesis del navegador (gratis, sin servidor). Con API key de ElevenLabs: genera MP3 real de alta calidad y lo puedes descargar.</p>
+            <p class="hint">🔊 Sin API key: habla en fragmentos con pausas naturales (respiración, pausas por signo y motor neural cuando existe). Con API key de ElevenLabs: MP3 real descargable a 44.1 kHz.</p>
           </div>
 
           <div class="card" id="historyMiniCard">
@@ -143,8 +170,8 @@
 
     <!-- VOICES -->
     <section class="panel" id="panel-voices">
-      <div class="page-head"><div><h2>Biblioteca de voces</h2><p>Colección curada estilo ElevenLabs. Pulsa ▶ para previsualizar, ＋ para usar en el estudio.</p></div>
-        <div class="filters"><button class="chip active" data-f="all">Todas</button><button class="chip" data-f="es">Español</button><button class="chip" data-f="en">English</button><button class="chip" data-f="Narr">Narración</button><button class="chip" data-f="Ads">Anuncios</button></div>
+      <div class="page-head"><div><h2>Biblioteca de voces</h2><p>30 personajes con tono, ritmo y actuación propios. Pulsa ▶ para escuchar su frase característica, ＋ para usarlo en el estudio.</p></div>
+        <div class="filters"><button class="chip active" data-f="all">Todas</button><button class="chip" data-f="hombre">👨 Hombres</button><button class="chip" data-f="mujer">👩 Mujeres</button><button class="chip" data-f="nino">🧒 Niños</button><button class="chip" data-f="anciano">👴 Ancianos</button><button class="chip" data-f="heroe">🦸 Héroes</button><button class="chip" data-f="villano">🦹 Villanos</button><button class="chip" data-f="fantasia">🧝 Fantasía</button><button class="chip" data-f="robot">🤖 Robots</button><button class="chip" data-f="terror">😱 Terror</button><button class="chip" data-f="español">Español</button><button class="chip" data-f="english">English</button></div>
       </div>
       <div class="voice-lib" id="voiceLib"></div>
       <div class="card"><h3>➕ Clonar tu voz (demo local)</h3><p>Graba 10 segundos y la añadimos a tu biblioteca local. La clonación neuronal real requiere la API de ElevenLabs (IVC).</p>
@@ -234,6 +261,8 @@
   <input id="apiKeyInput3" type="password" placeholder="xi-api-key…" />
   <div class="row"><button class="btn dark" id="saveKeyBtn3">Guardar clave</button><button class="btn ghost" id="apiModalClose">Cerrar</button></div>
 </div></div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
 
 <script src="app.js"></script>
 </body>

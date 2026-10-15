@@ -2,24 +2,47 @@
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => [...document.querySelectorAll(s)];
 
+/* Elenco de personajes: cada voz tiene tono (pitch), ritmo (rate), género,
+   ritmo narrativo (pace) y frase de muestra con personalidad. En modo local
+   (Web Speech) el pitch+rate+entonación crean el personaje; con API key se
+   usan voces reales de ElevenLabs + ajustes por personaje. */
 const CURATED = [
-  { id: "rachel", name: "Rachel", lang: "en", cat: "Narr", desc: "Joven, cálida y versátil. La más usada.", color: "#ec4899", tags: ["English", "Narración", "Joven"] },
-  { id: "drew", name: "Drew", lang: "en", cat: "Ads", desc: "Masculina, grave y segura. Ideal anuncios.", color: "#3b82f6", tags: ["English", "Anuncios", "Grave"] },
-  { id: "clyde", name: "Clyde", lang: "en", cat: "Narr", desc: "Maduro, tono cine y videojuegos.", color: "#8b5cf6", tags: ["English", "Cine", "Maduro"] },
-  { id: "sarah", name: "Sarah", lang: "en", cat: "Narr", desc: "Suave y clara para podcasts.", color: "#10b981", tags: ["English", "Podcast", "Suave"] },
-  { id: "antoni", name: "Antoni", lang: "en", cat: "Ads", desc: "Varón joven, enérgico.", color: "#f59e0b", tags: ["English", "Joven", "Energía"] },
-  { id: "lucia", name: "Lucía", lang: "es", cat: "Narr", desc: "Español neutro, perfecta para narración.", color: "#ef4444", tags: ["Español", "Narración", "Neutra"] },
-  { id: "diego", name: "Diego", lang: "es", cat: "Ads", desc: "Español grave para publicidad.", color: "#06b6d4", tags: ["Español", "Anuncios", "Grave"] },
-  { id: "valeria", name: "Valeria", lang: "es", cat: "Narr", desc: "Femenina dulce, audiolibros.", color: "#d946ef", tags: ["Español", "Audiolibro", "Dulce"] },
-  { id: "emily", name: "Emily", lang: "en", cat: "Narr", desc: "Femenina tranquila, meditación.", color: "#84cc16", tags: ["English", "Calma", "ASMR"] },
-  { id: "thomas", name: "Thomas", lang: "en", cat: "Ads", desc: "Documentales y trailers.", color: "#f97316", tags: ["English", "Trailer", "Documental"] },
-  { id: "camille", name: "Camille", lang: "fr", cat: "Narr", desc: "Francés elegante.", color: "#6366f1", tags: ["Français", "Elegante"] },
-  { id: "rafael", name: "Rafael", lang: "pt", cat: "Ads", desc: "Portugués cálido y comercial.", color: "#14b8a6", tags: ["Português", "Comercial"] },
+  { id: "lucia", emoji: "🎙️", name: "Lucía", lang: "es", gender: "f", pitch: 1.0, rate: 0.95, pace: "normal", energy: "mid", desc: "Narradora neutra. La todo-terreno.", color: "#ef4444", tags: ["Español", "mujer", "narracion", "neutra"], sample: "Hola, soy Lucía. Narro vídeos, podcasts y audiolibros con un español claro y neutro." },
+  { id: "diego", emoji: "📢", name: "Diego", lang: "es", gender: "m", pitch: 0.5, rate: 0.9, pace: "slow", energy: "mid", desc: "Locutor grave de radio y publicidad.", color: "#06b6d4", tags: ["Español", "hombre", "grave", "anuncios", "locutor"], sample: "Atención... En OnceLabs, las grandes historias... merecen una gran voz." },
+  { id: "rachel", emoji: "🌟", name: "Rachel", lang: "en", gender: "f", pitch: 1.2, rate: 1.0, pace: "normal", energy: "mid", desc: "Joven, cálida y versátil. La más usada.", color: "#ec4899", tags: ["English", "mujer", "joven", "narracion"], sample: "Hi! I'm Rachel. Warm, clear and friendly — perfect for almost anything." },
+  { id: "drew", emoji: "🦸", name: "Héroe Drew", lang: "en", gender: "m", pitch: 0.8, rate: 1.02, pace: "normal", energy: "high", desc: "Héroe decidido, voz de película.", color: "#3b82f6", tags: ["English", "hombre", "heroe", "cine", "energia"], sample: "No fear! I am Drew, and together... we will save the day!" },
+  { id: "clyde", emoji: "🦹", name: "Villano Clyde", lang: "en", gender: "m", pitch: 0.4, rate: 0.8, pace: "dark", energy: "low", desc: "Villano oscuro de cine y videojuegos.", color: "#8b5cf6", tags: ["English", "hombre", "villano", "oscuro", "cine", "terror"], sample: "So... you came... Mua... ja... ja... This kingdom is mine now." },
+  { id: "valeria", emoji: "👸", name: "Princesa Valeria", lang: "es", gender: "f", pitch: 1.4, rate: 1.0, pace: "normal", energy: "mid", desc: "Dulce y luminosa, cuentos y audiolibros.", color: "#d946ef", tags: ["Español", "mujer", "princesa", "fantasia", "dulce", "audiolibro"], sample: "¡Hola, hola! Soy la princesa Valeria, y hoy te contaré un cuento mágico." },
+  { id: "mateo", emoji: "🧒", name: "Mateo", lang: "es", gender: "m", pitch: 1.6, rate: 1.15, pace: "bright", energy: "high", desc: "Niño alegre y travieso.", color: "#22c55e", tags: ["Español", "hombre", "nino", "infantil", "alegre"], sample: "¡Yupi! ¡Soy Mateo! ¿Jugamos? ¡Tengo mil historias que contarte!" },
+  { id: "sofia", emoji: "👧", name: "Sofía", lang: "es", gender: "f", pitch: 1.7, rate: 1.15, pace: "bright", energy: "high", desc: "Niña curiosa y divertida.", color: "#f472b6", tags: ["Español", "mujer", "nino", "infantil", "alegre"], sample: "¡Holaaa! Me llamo Sofía... ¿Sabías que sé contar cuentos? ¡Escucha, escucha!" },
+  { id: "teo", emoji: "👴", name: "Abuelo Teo", lang: "es", gender: "m", pitch: 0.6, rate: 0.75, pace: "slow", energy: "low", desc: "Anciano sabio que cuenta historias.", color: "#a16207", tags: ["Español", "hombre", "anciano", "sabio", "cuentos"], sample: "Ay... En mis tiempos... les contaré una historia... de cuando yo era joven..." },
+  { id: "rosa", emoji: "👵", name: "Abuela Rosa", lang: "es", gender: "f", pitch: 0.9, rate: 0.75, pace: "slow", energy: "low", desc: "Anciana tierna de cuentos.", color: "#fb923c", tags: ["Español", "mujer", "anciano", "tierna", "cuentos"], sample: "Ven, mi cielo... Siéntate aquí... que la abuela te va a contar un cuento..." },
+  { id: "barba", emoji: "🏴‍☠️", name: "Capitán Barba", lang: "es", gender: "m", pitch: 0.5, rate: 0.95, pace: "pirate", energy: "high", desc: "Pirata rudo de los siete mares.", color: "#78350f", tags: ["Español", "hombre", "pirata", "fantasia", "aventura", "villano"], sample: "¡Arrr! ¡Soy el capitán Barba! ¡Todos a cubierta, que zarpamos a la aventura!" },
+  { id: "rx7", emoji: "🤖", name: "Robot RX-7", lang: "es", gender: "m", pitch: 0.7, rate: 0.85, pace: "robot", energy: "low", desc: "Robot metálico y monótono.", color: "#64748b", tags: ["Español", "hombre", "robot", "futurista", "metalico"], sample: "Yo. Soy. R. X. Siete. Sis. Te. Ma. En. Li. Nea. Y. O. Be. Dez. Co." },
+  { id: "zorp", emoji: "👽", name: "Alien Zorp", lang: "es", gender: "m", pitch: 1.8, rate: 0.8, pace: "alien", energy: "mid", desc: "Extraterrestre chillón y curioso.", color: "#4ade80", tags: ["Español", "hombre", "alien", "fantasia", "extraterrestre"], sample: "Bliip... ¡Saludos, humano! Vengo... del planeta Zorp... a aprender... tus historias." },
+  { id: "gruum", emoji: "👹", name: "Orco Gruum", lang: "es", gender: "m", pitch: 0.2, rate: 0.8, pace: "dark", energy: "low", desc: "Monstruo brutal de cueva.", color: "#166534", tags: ["Español", "hombre", "monstruo", "fantasia", "terror", "villano", "ogro"], sample: "Grrr... Yo... ser... Gruuum... ¡No... pasar... sin... mi... permiso!" },
+  { id: "lyra", emoji: "🧝", name: "Elfa Lyra", lang: "es", gender: "f", pitch: 1.5, rate: 0.95, pace: "soft", energy: "mid", desc: "Elfa mágica del bosque.", color: "#34d399", tags: ["Español", "mujer", "elfa", "fantasia", "magia", "dulce"], sample: "Que la luz del bosque te acompañe... Soy Lyra... guardiana de los cuentos antiguos..." },
+  { id: "morgana", emoji: "🧙", name: "Bruja Morgana", lang: "es", gender: "f", pitch: 0.7, rate: 0.85, pace: "dark", energy: "mid", desc: "Bruja misteriosa con risa malvada.", color: "#7e22ce", tags: ["Español", "mujer", "bruja", "fantasia", "terror", "villano", "magia"], sample: "Bienvenido... a mi cabaña... Jee... jee... jee... Tengo una pócima... solo para ti..." },
+  { id: "susu", emoji: "👻", name: "Fantasma Susu", lang: "es", gender: "f", pitch: 1.1, rate: 0.7, pace: "whisper", energy: "low", desc: "Fantasma que susurra en la noche.", color: "#c4b5fd", tags: ["Español", "mujer", "fantasma", "terror", "susurro", "fantasia"], sample: "Shhh... soy Susu... no tengas miedo... solo vengo... a susurrarte... un cuento..." },
+  { id: "epico", emoji: "⚔️", name: "Caballero Épico", lang: "es", gender: "m", pitch: 0.5, rate: 0.85, pace: "epic", energy: "high", desc: "Voz de tráiler y batallas.", color: "#b45309", tags: ["Español", "hombre", "heroe", "epico", "trailer", "caballero"], sample: "En un mundo... al borde del abismo... ¡Un héroe... se alzará... para cambiarlo todo!" },
+  { id: "chispa", emoji: "🤡", name: "Payaso Chispa", lang: "es", gender: "m", pitch: 1.5, rate: 1.2, pace: "bright", energy: "high", desc: "Payaso loco y fiestero.", color: "#f43f5e", tags: ["Español", "hombre", "payaso", "fiesta", "infantil", "alegre"], sample: "¡Tacháaan! ¡Soy Chispa, el payaso más divertido! ¡Vamos a reírnos muchísimo!" },
+  { id: "noir", emoji: "🕵️", name: "Detective Noir", lang: "es", gender: "m", pitch: 0.6, rate: 0.85, pace: "slow", energy: "low", desc: "Detective serio de novela negra.", color: "#334155", tags: ["Español", "hombre", "detective", "serio", "misterio"], sample: "Era una noche lluviosa... cuando el caso... llegó a mi despacho..." },
+  { id: "emily", emoji: "🌙", name: "Emily ASMR", lang: "en", gender: "f", pitch: 1.0, rate: 0.7, pace: "whisper", energy: "low", desc: "Susurro suave para dormir y meditar.", color: "#84cc16", tags: ["English", "mujer", "susurro", "calma", "asmr", "dormir"], sample: "Close your eyes... breathe... in... and... out... Everything is calm now..." },
+  { id: "antoni", emoji: "🚀", name: "Anunciador Turbo", lang: "en", gender: "m", pitch: 0.9, rate: 1.15, pace: "bright", energy: "high", desc: "Energía pura para anuncios.", color: "#f59e0b", tags: ["English", "hombre", "anuncios", "energia", "joven"], sample: "Hey! Are you ready?! This is the most amazing deal ever! Let's go!" },
+  { id: "sabio", emoji: "🧘", name: "Sabio Ancestral", lang: "es", gender: "m", pitch: 0.5, rate: 0.7, pace: "slow", energy: "low", desc: "Maestro milenario de montaña.", color: "#0d9488", tags: ["Español", "hombre", "anciano", "sabio", "calma"], sample: "Respira... joven discípulo... La paciencia... es la mayor de las fuerzas..." },
+  { id: "reina", emoji: "👑", name: "Reina Malvada", lang: "es", gender: "f", pitch: 0.8, rate: 0.85, pace: "dark", energy: "mid", desc: "Reina fría y autoritaria.", color: "#991b1b", tags: ["Español", "mujer", "reina", "villano", "fantasia", "terror"], sample: "Arrodíllate... ante tu reina... Este reino... me pertenece... ¡por siempre!" },
+  { id: "volt", emoji: "⚡", name: "Super Volt", lang: "es", gender: "m", pitch: 0.7, rate: 1.05, pace: "epic", energy: "high", desc: "Superhéroe eléctrico y veloz.", color: "#eab308", tags: ["Español", "hombre", "heroe", "superheroe", "energia"], sample: "¡Soy Volt! ¡Más rápido que el rayo! ¡Ningún villano escapará esta vez!" },
+  { id: "colt", emoji: "🤠", name: "Vaquero Colt", lang: "es", gender: "m", pitch: 0.6, rate: 0.9, pace: "slow", energy: "mid", desc: "Vaquero rudo del salvaje oeste.", color: "#92400e", tags: ["Español", "hombre", "vaquero", "oeste", "rudo"], sample: "Forastero... En este pueblo... la palabra... vale más que el oro..." },
+  { id: "luna", emoji: "🔬", name: "Científica Luna", lang: "es", gender: "f", pitch: 1.3, rate: 1.1, pace: "bright", energy: "high", desc: "Científica chiflada y genial.", color: "#0891b2", tags: ["Español", "mujer", "cientifica", "loca", "energia", "joven"], sample: "¡Eureka! ¡Mi invento funciona! ¡Voy a convertir palabras... en pura electricidad!" },
+  { id: "sarah", emoji: "🎧", name: "Sarah", lang: "en", gender: "f", pitch: 1.1, rate: 0.95, pace: "soft", energy: "mid", desc: "Suave y clara para podcasts.", color: "#10b981", tags: ["English", "mujer", "podcast", "suave"], sample: "Hey there, welcome back to the show. Today we have a truly special story." },
+  { id: "thomas", emoji: "🎬", name: "Thomas", lang: "en", gender: "m", pitch: 0.6, rate: 0.9, pace: "slow", energy: "mid", desc: "Documentales y tráilers.", color: "#f97316", tags: ["English", "hombre", "documental", "trailer", "grave"], sample: "In a land forgotten by time... one story... remained untold... until now." },
+  { id: "camille", emoji: "🗼", name: "Camille", lang: "fr", gender: "f", pitch: 1.2, rate: 0.95, pace: "soft", energy: "mid", desc: "Francés elegante.", color: "#6366f1", tags: ["Frances", "mujer", "elegante"], sample: "Bonjour... Je suis Camille... Et je vais vous raconter... une belle histoire..." },
 ];
-// Voice IDs reales de ElevenLabs (públicos) para cuando hay API key
+// Voice IDs reales de ElevenLabs (públicos) para cuando hay API key + ajustes por personaje
 const EL_VOICE_IDS = { rachel: "21m00Tcm4TlvDq8ikWAM", drew: "29vD33N1CtxCmqQRPOHJ2", clyde: "2EiwWnXFnvU5JabPnv8n", sarah: "EXAVITQu4vr4xnSDxMaL", antoni: "ErXwobaYiN019PkySvjV", emily: "LcfcDJNUP1GQjkzn1xUU", thomas: "GBv7mTt0lZsSiMalrvP6" };
+const EL_FALLBACK = { f: "EXAVITQu4vr4xnSDxMaL", m: "29vD33N1CtxCmqQRPOHJ2" };
 
-let state = { voice: "rachel", sysVoices: [], filter: "all", credits: 10000, customVoices: [] };
+let state = { voice: "lucia", gridFilter: "all", sysVoices: [], filter: "all", credits: 10000, customVoices: [] };
 try { state.customVoices = JSON.parse(localStorage.getItem("oncelabs_custom") || "[]"); } catch {}
 try { state.credits = Number(localStorage.getItem("oncelabs_credits") || 10000); } catch {}
 
@@ -48,8 +71,8 @@ function refreshKeyUI() {
 }
 function saveKey(v) {
   localStorage.setItem("oncelabs_xi_key", (v || "").trim());
-  refreshKeyUI();
-  toast(apiKey() ? "Clave guardada. Ya puedes generar MP3 reales." : "Clave eliminada. Modo local.");
+  refreshKeyUI(); updateEngineBadge();
+  toast(apiKey() ? "✅ Clave guardada. Modo ElevenLabs real activado." : "Clave eliminada. Modo local fluido.", apiKey() ? "ok" : "info");
 }
 ["#saveKeyBtn", "#saveKeyBtn2", "#saveKeyBtn3"].forEach((s, i) => $(s).addEventListener("click", () => saveKey($(["#apiKeyInput", "#apiKeyInput2", "#apiKeyInput3"][i]).value)));
 $("#apiKeyBtn").addEventListener("click", () => $("#apiModal").classList.add("open"));
@@ -59,90 +82,278 @@ $("#apiModalClose").addEventListener("click", () => $("#apiModal").classList.rem
 /* ---------- System voices ---------- */
 function loadSysVoices() {
   try { state.sysVoices = speechSynthesis.getVoices(); } catch { state.sysVoices = []; }
-  renderVoiceGrid(); renderLib(); fillChangerVoices();
+  renderVoiceGrid(); renderLib(); fillChangerVoices(); updateEngineBadge();
 }
 if ("speechSynthesis" in window) { loadSysVoices(); speechSynthesis.onvoiceschanged = loadSysVoices; }
 else { renderVoiceGrid(); renderLib(); }
 
+const FEMALE_HINTS = /female|femenin|maria|lucia|paulina|helena|zira|samantha|karen|veena|tessa|sofia|elena|laura|monica|carmen|ana|rosa|valeria|emily|sarah|rachel|camille|google.*espa.*f|microsoft.*(sabina|helena|laura|elena)/i;
+const MALE_HINTS = /male|masculin|diego|jorge|carlos|pablo|miguel|pedro|antonio|hombre|david|daniel|alvaro|sergio|tomas|thomas|drew|clyde|george|harry|liam|microsoft.*(pablo|raul|alvaro)/i;
+
 function pickSysVoice(cur) {
   const vs = state.sysVoices;
   if (!vs.length) return null;
-  const wantEs = cur.lang === "es", wantFr = cur.lang === "fr", wantPt = cur.lang === "pt";
-  const langSel = $("#langSel").value || "es-ES";
-  let pool = vs.filter((v) => v.lang && v.lang.startsWith(langSel.slice(0, 2)));
-  if (!pool.length) pool = vs.filter((v) => wantEs ? v.lang.startsWith("es") : wantFr ? v.lang.startsWith("fr") : wantPt ? v.lang.startsWith("pt") : v.lang.startsWith("en"));
+  const langSel = ($("#langSel") && $("#langSel").value) || "es-ES";
+  const wantLang = (cur.lang && cur.lang !== "es") ? cur.lang : langSel;
+  let pool = vs.filter((v) => v.lang && v.lang.startsWith(wantLang.slice(0, 2)));
+  if (!pool.length) pool = vs.filter((v) => v.lang && v.lang.startsWith((cur.lang || "es").slice(0, 2)));
   if (!pool.length) pool = vs;
-  const fem = /female|maria|lucia|paulina|helena|zira|samantha|karen|veena|tessa/i.test(cur.name + cur.desc);
+  const wantF = cur.gender === "f";
+  const exactLang = (v) => v.lang === wantLang || v.lang.replace("_", "-") === wantLang;
   const ranked = [...pool].sort((a, b) => {
-    const score = (v) => (v.localService ? 1 : 0) + (/google|natural|neural/i.test(v.name) ? 2 : 0) + (fem && /female|zira|samantha|helena|lucia/i.test(v.name) ? 1 : 0);
+    const score = (v) => {
+      let s = 0;
+      // Voces en la nube (Google/Neural) suenan mucho más naturales y fluidas
+      if (!v.localService) s += 6;
+      if (/google|neural|natural|premium|enhanced/i.test(v.name)) s += 5;
+      if (/samantha|karen|daniel|jorge|monica|paulina|helena|sabina|elena|laura|xiaoxiao|aria|jenny|guy/i.test(v.name)) s += 2;
+      if (exactLang(v)) s += 3;
+      if (wantF && FEMALE_HINTS.test(v.name)) s += 4;
+      if (!wantF && MALE_HINTS.test(v.name)) s += 4;
+      if (!wantF && FEMALE_HINTS.test(v.name) && !/male/i.test(v.name)) s -= 4;
+      if (wantF && MALE_HINTS.test(v.name) && !FEMALE_HINTS.test(v.name)) s -= 3;
+      return s;
+    };
     return score(b) - score(a);
   });
+  // Para personajes infantiles preferimos la segunda voz del mismo género (más variedad tímbrica)
+  if ((cur.id === "mateo" || cur.id === "sofia") && ranked.length > 1) {
+    const sameGender = ranked.filter((v) => wantF ? FEMALE_HINTS.test(v.name) || !MALE_HINTS.test(v.name) : MALE_HINTS.test(v.name) || !FEMALE_HINTS.test(v.name));
+    if (sameGender.length > 1) return sameGender[1];
+  }
   return ranked[0];
+}
+function updateEngineBadge() {
+  const el = $("#engineBadge"); if (!el) return;
+  if (apiKey()) { el.textContent = "ElevenLabs API · MP3 44.1 kHz"; el.dataset.q = "elite"; return; }
+  const v = pickSysVoice(voiceById(state.voice));
+  if (v && !v.localService && /google|neural|natural|premium/i.test(v.name)) { el.textContent = "Motor neural en la nube · " + v.name; el.dataset.q = "neural"; }
+  else if (v) { el.textContent = "Voz del sistema · " + v.name + " · modo fluido"; el.dataset.q = "local"; }
+  else { el.textContent = "Buscando voces del sistema…"; el.dataset.q = "search"; }
+  // Si tras 2.5s no hay voces TTS en el navegador, avisamos sin bloquear
+  setTimeout(() => {
+    if (el.dataset.q !== "search") return;
+    if (!state.sysVoices.length && !apiKey()) { el.textContent = "Sin voces TTS en este navegador · usa API key"; el.dataset.q = "local"; }
+  }, 2500);
 }
 
 /* ---------- Voice UI ---------- */
+function voiceBadges(v) {
+  const tone = v.pitch <= 0.6 ? "⚫ grave" : v.pitch >= 1.4 ? "🔊 agudo" : "🎵 medio";
+  const pace = v.rate <= 0.8 ? "🐢 lento" : v.rate >= 1.1 ? "🐇 rápido" : "⏱️ normal";
+  return `<span>${v.emoji || "🎭"} ${tone} · ${pace}</span>`;
+}
 function renderVoiceGrid() {
   const q = ($("#voiceSearch").value || "").toLowerCase();
+  const gf = (state.gridFilter || "all").toLowerCase();
   const grid = $("#voiceGrid"); grid.innerHTML = "";
-  allVoices().filter((v) => (v.name + v.desc + v.tags.join(" ")).toLowerCase().includes(q)).forEach((v) => {
+  const list = allVoices().filter((v) => (v.name + " " + v.desc + " " + (v.tags || []).join(" ")).toLowerCase().includes(q))
+    .filter((v) => gf === "all" || (v.tags || []).join(" ").toLowerCase().includes(gf));
+  if (!list.length) grid.innerHTML = '<p class="hint">Sin resultados para este filtro. Prueba con “Todos”.</p>';
+  list.forEach((v) => {
     const b = document.createElement("button");
     b.className = "voice-card" + (state.voice === v.id ? " sel" : "");
-    b.innerHTML = `<span class="ava" style="background:${v.color}">${v.name[0]}</span><span><b>${v.name}</b><small>${v.desc}</small></span><span class="play" title="Previsualizar">▶</span>`;
+    b.innerHTML = `<span class="ava" style="--g:${v.color}">${v.emoji || v.name[0]}</span><span><b>${v.name}</b><small>${v.desc}</small><small style="opacity:.75">${v.pitch ? "tono " + v.pitch.toFixed(1) + " · ritmo " + v.rate.toFixed(2) + "×" : "voz personal"}</small></span><span class="play" title="Previsualizar">▶</span>`;
     b.onclick = (e) => {
       if (e.target.classList.contains("play")) { e.stopPropagation(); previewVoice(v.id); return; }
       state.voice = v.id;
       $$("#voiceGrid .voice-card").forEach((x) => x.classList.remove("sel")); b.classList.add("sel");
+      toast("Personaje: " + v.name + " — " + v.desc);
     };
     grid.appendChild(b);
   });
 }
 function renderLib() {
   const lib = $("#voiceLib"); if (!lib) return; lib.innerHTML = "";
-  allVoices().filter((v) => state.filter === "all" || v.tags.join(" ").toLowerCase().includes(state.filter.toLowerCase()) || v.cat === state.filter).forEach((v) => {
+  allVoices().filter((v) => state.filter === "all" || (v.tags || []).join(" ").toLowerCase().includes(state.filter.toLowerCase()) || (v.cat || "") === state.filter).forEach((v) => {
     const d = document.createElement("div"); d.className = "lib-card";
-    d.innerHTML = `<div class="top"><span class="ava" style="background:${v.color}">${v.name[0]}</span><div><b>${v.name}</b><div class="muted" style="font-size:12px">${v.desc}</div></div></div><div class="tags">${v.tags.map((t) => `<span>${t}</span>`).join("")}</div><div class="row"><button class="mini" data-p="${v.id}">▶ Escuchar</button><button class="mini" data-u="${v.id}">＋ Usar</button></div>`;
+    d.innerHTML = `<div class="top"><span class="ava" style="--g:${v.color}">${v.emoji || v.name[0]}</span><div><b>${v.name}</b><div class="muted" style="font-size:12px">${v.desc}</div></div></div><div class="tags">${(v.tags || []).map((t) => `<span>${t}</span>`).join("")}${v.pitch ? voiceBadges(v) : ""}</div><div class="row"><button class="mini" data-p="${v.id}">▶ Escuchar</button><button class="mini" data-u="${v.id}">＋ Usar</button></div>`;
     lib.appendChild(d);
   });
   lib.querySelectorAll("[data-p]").forEach((b) => b.onclick = () => previewVoice(b.dataset.p));
   lib.querySelectorAll("[data-u]").forEach((b) => b.onclick = () => { state.voice = b.dataset.u; renderVoiceGrid(); goTab("tts"); toast("Voz " + voiceById(b.dataset.u).name + " seleccionada."); });
 }
 $("#voiceSearch").addEventListener("input", renderVoiceGrid);
-$$(".chip").forEach((c) => c.addEventListener("click", () => { $$(".chip").forEach((x) => x.classList.remove("active")); c.classList.add("active"); state.filter = c.dataset.f; renderLib(); }));
+$$(".chip").forEach((c) => c.addEventListener("click", () => {
+  const inStudio = c.closest("#panel-tts");
+  const scope = inStudio ? '.type-row .chip' : '#panel-voices .filters .chip';
+  $$(scope).forEach((x) => x.classList.remove("active")); c.classList.add("active");
+  if (inStudio) { state.gridFilter = c.dataset.f; renderVoiceGrid(); }
+  else { state.filter = c.dataset.f; renderLib(); }
+}));
 function fillChangerVoices() {
   const s = $("#changerVoice"); s.innerHTML = "";
   allVoices().forEach((v) => { const o = document.createElement("option"); o.value = v.id; o.textContent = v.name + " — " + v.desc; s.appendChild(o); });
 }
 
-/* ---------- TTS core ---------- */
-function speakLocal(text, { onend } = {}) {
-  const v = voiceById(state.voice);
-  const u = new SpeechSynthesisUtterance(text);
-  const sys = pickSysVoice(v);
-  if (sys) u.voice = sys;
-  u.lang = $("#langSel").value || "es-ES";
-  u.rate = ($("#speed").value || 100) / 100;
-  u.pitch = 1 + (($("#styleEx").value || 20) - 20) / 200;
-  u.volume = 1;
-  speechSynthesis.cancel();
-  $("#eq").classList.add("on");
-  u.onend = u.onerror = () => { $("#eq").classList.remove("on"); onend && onend(); };
-  speechSynthesis.speak(u);
-  return u;
+/* ---------- TTS core: motor de habla fluida ----------
+   Cadena: normalizar texto → actuar personaje → trocear en frases
+   → encolar con pausas naturales (evita cortes y silencios raros
+   de los motores en textos largos) + keepalive anti-corte. */
+const clamp = (n, a, b) => Math.min(b, Math.max(a, n));
+
+function normalizeText(raw) {
+  return String(raw || "")
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/https?:\/\/\S+/g, " ")
+    .replace(/^[#>\-*]+\s?/gm, "")
+    .replace(/[*_`|]/g, "")
+    .replace(/(\d)\s*%/g, "$1 por ciento")
+    .replace(/(\d)\s*€/g, "$1 euros")
+    .replace(/(\d)\s*\$/g, "$1 dólares")
+    .replace(/\$\s?(\d)/g, "$1 dólares ")
+    .replace(/\betc\.?/gi, "etcétera")
+    .replace(/\bej\.?/g, "ejemplo")
+    .replace(/\bvs\.?/g, "contra")
+    .replace(/\baprox\.?/g, "aproximadamente")
+    .replace(/\bDr\.?\s/g, "Doctor ")
+    .replace(/\bSr\.?\s/g, "Señor ")
+    .replace(/\bSra\.?\s/g, "Señora ")
+    .replace(/\bEE\.\s?UU\.?/g, "Estados Unidos")
+    .replace(/\bnº\b/gi, "número")
+    .replace(/\.{2,}/g, "…")
+    .replace(/\s*([.!?…,;:])\s*/g, "$1 ")
+    .replace(/\s{2,}/g, " ")
+    .trim();
 }
+
+function paceText(text, v) {
+  if (!v || !v.pace || v.pace === "normal") return text;
+  let t = " " + text + " ";
+  switch (v.pace) {
+    case "slow": t = t.replace(/([,.¿?¡!;:])/g, "$1… "); break;
+    case "dark": t = t.replace(/([.¿?¡!])/g, "$1… ").replace(/,/g, ",… "); break;
+    case "epic": t = t.replace(/,/g, "… ").replace(/\.\s/g, "… "); break;
+    case "whisper": t = t.replace(/\.\s/g, "… ").replace(/,/g, "… "); break;
+    case "soft": t = t.replace(/\.\s/g, "… "); break;
+    case "bright": t = t.replace(/\.\s/g, "! "); break;
+    case "pirate": {
+      let n = 0;
+      t = "¡Arrr! " + t.replace(/[.!?]\s/g, (m) => (++n % 3 === 0 ? m + "¡Já, já! " : m));
+      break;
+    }
+    case "alien": {
+      let n = 0;
+      t = "Bliip… " + t.replace(/[.!?]\s/g, (m) => (++n % 2 ? m + "bliip… " : m));
+      break;
+    }
+    case "robot": {
+      const words = t.trim().split(/\s+/);
+      if (words.length <= 18) return words.join(". ");
+      return words.slice(0, 14).join(". ") + " … " + words.slice(14).join(" ");
+    }
+    default: break;
+  }
+  return t.replace(/\s{2,}/g, " ").trim();
+}
+
+function splitChunks(text, max = 210) {
+  const t = text.replace(/\.{2,}/g, "…");
+  const parts = t.match(/[^.!?…]+[.!?…]+["»')\]]*\s*|[^.!?…]+$/g) || [t];
+  const out = [];
+  let cur = "";
+  const pushPiece = (p) => {
+    if ((cur + p).length <= max) { cur += p; return; }
+    if (cur) out.push(cur.trim());
+    if (p.length <= max) { cur = p; return; }
+    const subs = p.match(/[^,;:]+[,;:]+\s*|[^,;:]+$/g) || [p];
+    cur = "";
+    for (const q of subs) {
+      if ((cur + q).length <= max) cur += q;
+      else { if (cur) out.push(cur.trim()); cur = q; }
+    }
+  };
+  for (const p of parts) pushPiece(p);
+  if (cur.trim()) out.push(cur.trim());
+  return out.filter((c) => c.replace(/[…\s]/g, "").length);
+}
+
+let speechSeq = 0;
+let speechKeep = null;
+function stopKeepalive() { if (speechKeep) { clearInterval(speechKeep); speechKeep = null; } }
+function startKeepalive() {
+  stopKeepalive();
+  speechKeep = setInterval(() => { try { if (speechSynthesis.speaking) speechSynthesis.resume(); } catch {} }, 7000);
+}
+function setSpeaking(on) { $$(".eq").forEach((e) => e.classList.toggle("on", on)); }
+
+function speakLocal(text, { voiceId, onend, raw = false } = {}) {
+  if (!("speechSynthesis" in window)) { onend && onend(); return null; }
+  const v = voiceById(voiceId || state.voice);
+  const acted = raw ? normalizeText(text) : paceText(normalizeText(text), v);
+  const chunks = splitChunks(acted);
+  const seq = ++speechSeq;
+  speechSynthesis.cancel();
+  stopKeepalive();
+  setSpeaking(true);
+  if (!chunks.length) { setSpeaking(false); onend && onend(); return null; }
+
+  const sys = pickSysVoice(v);
+  const lang = ($("#langSel") && $("#langSel").value) || (v.lang === "en" ? "en-US" : v.lang === "fr" ? "fr-FR" : "es-ES");
+  const userRate = (($("#speed") && $("#speed").value) || 100) / 100;
+  const styleShift = ((($("#styleEx") && $("#styleEx").value) || 20) - 20) / 200;
+  const rate = clamp((v.rate || 1) * userRate, 0.4, 1.6);
+  const pitch = clamp((v.pitch != null ? v.pitch : 1) + styleShift, 0, 2);
+  startKeepalive();
+
+  const finish = () => {
+    if (seq !== speechSeq) return;
+    stopKeepalive();
+    setSpeaking(false);
+    onend && onend();
+  };
+  const step = (i) => {
+    if (seq !== speechSeq) return;
+    if (i >= chunks.length) return finish();
+    const u = new SpeechSynthesisUtterance(chunks[i]);
+    if (sys) u.voice = sys;
+    u.lang = lang; u.rate = rate; u.pitch = pitch; u.volume = 1;
+    const last = i === chunks.length - 1;
+    let fired = false;
+    const next = () => {
+      if (fired || seq !== speechSeq) return;
+      fired = true; clearTimeout(wd);
+      if (last) return finish();
+      const c = chunks[i];
+      const pause = /[…!?]$/.test(c.trim()) ? 260 : 90; // respiración natural
+      setTimeout(() => step(i + 1), pause);
+    };
+    const wd = setTimeout(next, 20000); // watchdog: si el motor no emite onend, seguimos
+    u.onend = next; u.onerror = next;
+    speechSynthesis.speak(u);
+  };
+  // Pequeña espera tras cancel(): algunos motores descartan el primer utterance
+  setTimeout(() => step(0), 50);
+  return { cancel: () => { speechSeq++; stopKeepalive(); setSpeaking(false); try { speechSynthesis.cancel(); } catch {} } };
+}
+
 function previewVoice(id) {
   const v = voiceById(id);
-  speakLocal(`${v.name}. ${v.desc}. Hola, esta es una muestra de mi voz.`);
-  toast("Reproduciendo muestra: " + v.name);
+  state.voice = id; renderVoiceGrid(); updateEngineBadge();
+  // raw: la muestra ya trae la actuación del personaje (pausas incluidas)
+  speakLocal(v.sample || `${v.name}. ${v.desc}. Hola, esta es una muestra de mi voz.`, { voiceId: id, raw: true });
+  toast(`🎭 ${v.name}: ${v.desc}`);
+}
+function elSettingsFor(v) {
+  // Estabilidad/estilo por arquetipo: villanos estables y graves, niños expresivos, robots planos
+  if (v.pace === "robot" || v.pace === "alien") return { stability: 0.9, style: 0.0 };
+  if (v.pace === "dark" || v.pitch <= 0.6) return { stability: 0.75, style: 0.15 };
+  if (v.pace === "whisper" || v.pace === "soft" || v.pace === "slow") return { stability: 0.65, style: 0.3 };
+  if (v.pace === "bright" || (v.pitch || 0) >= 1.4) return { stability: 0.3, style: 0.8 };
+  if (v.energy === "high") return { stability: 0.4, style: 0.7 };
+  return { stability: ($("#stability") && $("#stability").value / 100) || 0.5, style: ($("#styleEx") && $("#styleEx").value / 100) || 0.2 };
 }
 async function elevenTTS(text) {
   const key = apiKey();
   const v = voiceById(state.voice);
-  const vid = EL_VOICE_IDS[v.id] || EL_VOICE_IDS.rachel;
+  const vid = EL_VOICE_IDS[v.id] || EL_FALLBACK[v.gender] || EL_VOICE_IDS.rachel;
+  const s = elSettingsFor(v);
+  const faithful = v.pace === "robot" ? paceText(text, v) : text; // el robot necesita sus pausas
   const model = $("#modelSel").value === "eleven_v3" ? "eleven_v3" : $("#modelSel").value === "turbo_v2" ? "eleven_turbo_v2_5" : $("#modelSel").value === "flash_v2" ? "eleven_flash_v2_5" : "eleven_multilingual_v2";
   const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${vid}`, {
     method: "POST",
     headers: { "xi-api-key": key, "Content-Type": "application/json", Accept: "audio/mpeg" },
-    body: JSON.stringify({ text, model_id: model, voice_settings: { stability: $("#stability").value / 100, similarity_boost: $("#similarity").value / 100, style: $("#styleEx").value / 100, use_speaker_boost: true } }),
+    body: JSON.stringify({ text: faithful, model_id: model, voice_settings: { stability: s.stability, similarity_boost: ($("#similarity") && $("#similarity").value / 100) || 0.75, style: s.style, use_speaker_boost: true } }),
   });
   if (!res.ok) throw new Error("ElevenLabs " + res.status + ": " + (await res.text()).slice(0, 200));
   return await res.blob();
@@ -179,7 +390,12 @@ $("#txtFile").addEventListener("change", async (e) => {
   const f = e.target.files[0]; if (!f) return;
   $("#ttsText").value = (await f.text()).slice(0, 5000); updateCount();
 });
-$("#stopBtn").onclick = () => { try { speechSynthesis.cancel(); } catch {} const a = $("#audioPlayer"); a.pause(); $("#eq").classList.remove("on"); setStatus("Detenido."); };
+$("#stopBtn").onclick = () => {
+  speechSeq++; stopKeepalive(); setSpeaking(false);
+  try { speechSynthesis.cancel(); } catch {}
+  const a = $("#audioPlayer"); a.pause();
+  setStatus("⏹ Detenido.");
+};
 $("#generateBtn").onclick = async () => {
   const text = $("#ttsText").value.trim();
   if (!text) return toast("Escribe primero un texto.");
@@ -192,13 +408,13 @@ $("#generateBtn").onclick = async () => {
       const url = URL.createObjectURL(blob);
       const a = $("#audioPlayer"); a.style.display = "block"; a.src = url; a.play();
       a.dataset.blob = url; spendCredits(costOf(text)); addHistory(text, url);
-      setStatus("✅ MP3 real de ElevenLabs listo.");
+      toast("✅ MP3 real de ElevenLabs listo — calidad 44.1 kHz.", "ok");
     } else {
       if ($("#autoplay").checked !== false) speakLocal(text);
       spendCredits(costOf(text)); addHistory(text, null);
-      setStatus("✅ Reproduciendo con voz local gratuita. Añade API key para MP3 descargable.");
+      toast("✅ Reproduciendo en modo fluido (fragmentos + respiración). Añade API key para MP3 descargable.", "ok");
     }
-  } catch (err) { console.error(err); setStatus("❌ " + err.message); toast("Error: " + err.message); }
+  } catch (err) { console.error(err); toast("Error: " + err.message, "err"); }
   btn.disabled = false; btn.textContent = "▶ Generar voz";
 };
 $("#downloadBtn").onclick = async () => {
@@ -207,8 +423,17 @@ $("#downloadBtn").onclick = async () => {
   if (!apiKey()) return toast("La descarga MP3 necesita tu API key de ElevenLabs (la reproducción local ya es gratis).");
   $("#generateBtn").click();
 };
-function setStatus(t) { $("#statusLine").textContent = t; }
-function toast(t) { setStatus(t); }
+function setStatus(t) { const el = $("#statusLine"); if (el) el.textContent = t; }
+function toast(t, kind = "info") {
+  setStatus(t);
+  const box = $("#toasts"); if (!box) return;
+  const el = document.createElement("div");
+  el.className = "toast " + kind;
+  el.innerHTML = `<span class="dot"></span><span>${String(t)}</span>`;
+  box.appendChild(el);
+  requestAnimationFrame(() => el.classList.add("in"));
+  setTimeout(() => { el.classList.remove("in"); setTimeout(() => el.remove(), 350); }, 3600);
+}
 
 /* sliders */
 [["#stability", "#vStab", "%"], ["#similarity", "#vSim", "%"], ["#styleEx", "#vStyle", "%"]].forEach(([a, b]) => $(a).addEventListener("input", (e) => $(b).textContent = e.target.value + "%"));
@@ -284,16 +509,16 @@ async function recordOnce(ms = 10000) {
 $("#cloneRecBtn").onclick = async () => { $("#cloneRecBtn").textContent = "● Grabando 5s…"; const b = await recordOnce(5000); const url = URL.createObjectURL(b); const a = $("#cloneAudio"); a.style.display = "block"; a.src = url; a.dataset.url = url; $("#cloneRecBtn").textContent = "● Grabar muestra"; toast("Muestra lista. Ponle nombre y añádela."); };
 $("#cloneAddBtn").onclick = () => {
   const n = $("#cloneName").value.trim() || "Mi voz " + (state.customVoices.length + 1);
-  state.customVoices.unshift({ id: "custom-" + Date.now(), name: n, lang: "es", cat: "Narr", desc: "Voz local clonada (demo).", color: "#0ea5e9", tags: ["Español", "Personal"] });
+  state.customVoices.unshift({ id: "custom-" + Date.now(), emoji: "🧑", name: n, lang: "es", gender: "f", pitch: 1.0, rate: 1.0, pace: "normal", energy: "mid", desc: "Voz local clonada (demo).", color: "#0ea5e9", tags: ["Español", "personal", "mujer"] });
   localStorage.setItem("oncelabs_custom", JSON.stringify(state.customVoices));
-  renderVoiceGrid(); renderLib(); toast("Voz «" + n + "» añadida.");
+  renderVoiceGrid(); renderLib(); fillChangerVoices(); toast("Voz «" + n + "» añadida.");
 };
 $("#changerRecBtn").onclick = async () => { $("#changerRecBtn").textContent = "Grabando 5s…"; const b = await recordOnce(5000); $("#changerSrc").src = URL.createObjectURL(b); $("#changerRecBtn").textContent = "● Grabar"; };
 $("#changerFile").addEventListener("change", (e) => { const f = e.target.files[0]; if (f) $("#changerSrc").src = URL.createObjectURL(f); });
 $("#changerBtn").onclick = () => {
   const v = voiceById($("#changerVoice").value);
-  $("#changerMsg").textContent = "Demo: reproduciendo origen con entonación de " + v.name + "…";
-  speakLocal("Hola, ahora hablo con la voz de " + v.name + ". Este es el cambiador de voz en modo demo local.");
+  $("#changerMsg").textContent = `Demo: hablando como ${v.emoji || ""} ${v.name} (tono ${v.pitch}, ritmo ${v.rate})…`;
+  speakLocal(`Hola, ahora hablo con la voz de ${v.name}. ${v.sample || "Este es el cambiador de voz en modo demo local."}`, { voiceId: v.id });
 };
 $("#dubBtn").onclick = () => {
   const f = $("#dubFile").files[0];
@@ -308,7 +533,7 @@ $("#isoBtn").onclick = () => {
 const botReply = (q) => {
   q = q.toLowerCase();
   if (/precio|costo|cuesta/.test(q)) return "Nuestro plan gratuito incluye diez mil créditos al mes. El plan Starter cuesta cinco euros y es el más popular.";
-  if (/voz|voice/.test(q)) return "Tenemos doce voces curadas más las de tu navegador. Mi favorita es Lucía para español y Rachel para inglés.";
+  if (/voz|voice|personaje/.test(q)) return "Tenemos 30 personajes: pirata, robot, alien, orco, elfa, bruja, fantasma, niños, abuelos, héroes, villanos y más. Mi favorito es el Capitán Barba... ¡Arrr!";
   if (/hola|buenas/.test(q)) return "¡Hola! Soy Nova, tu agente de voz. Puedo narrar, doblar y responder preguntas.";
   if (/quien|eleven/.test(q)) return "Soy OnceLabs, un clon educativo de ElevenLabs que funciona gratis en tu navegador con la Web Speech API.";
   return "Interesante. He procesado tu mensaje: " + q.slice(0, 80) + ". Puedo leerte cualquier texto con la voz que elijas.";
@@ -327,6 +552,45 @@ $("#chatVoice").onclick = () => { goTab("stt"); toast("Usa el dictado en vivo y 
 $("#copyCurl").onclick = () => navigator.clipboard.writeText($("#curlExample").textContent);
 $("#curlExample").textContent = $("#curlExample").textContent.replace("VOICE_ID", EL_VOICE_IDS.rachel);
 
+/* ---------- Intro / lobby ---------- */
+const LOBBY_SHOWCASE = ["lucia", "barba", "rx7", "clyde", "mateo", "morgana"];
+function renderLobby() {
+  const box = $("#lobbyShow"); if (!box) return;
+  box.innerHTML = LOBBY_SHOWCASE.map((id) => {
+    const v = voiceById(id);
+    return `<button class="lobby-chip" data-id="${id}" type="button"><span class="chip-ava" style="--c:${v.color}">${v.emoji}</span><b>${v.name}</b><small>${v.desc}</small></button>`;
+  }).join("");
+  box.querySelectorAll(".lobby-chip").forEach((b) => {
+    b.addEventListener("click", () => {
+      box.querySelectorAll(".lobby-chip").forEach((x) => x.classList.remove("playing"));
+      b.classList.add("playing");
+      previewVoice(b.dataset.id);
+      setTimeout(() => b.classList.remove("playing"), 4000);
+    });
+  });
+}
+function enterLobby() {
+  const l = $("#lobby"); if (!l || l.classList.contains("gone")) return;
+  speechSeq++; stopKeepalive(); setSpeaking(false);
+  try { speechSynthesis.cancel(); } catch {}
+  l.classList.add("gone");
+  document.body.classList.remove("lobby-open");
+  setTimeout(() => { l.style.display = "none"; }, 750);
+  setTimeout(() => {
+    speakLocal("Bienvenido a OnceLabs. Elige tu personaje, escribe el guion y pulsa generar para escuchar voces profesionales.", { voiceId: state.voice });
+  }, 700);
+}
+if ($("#enterBtn")) $("#enterBtn").addEventListener("click", enterLobby);
+document.addEventListener("keydown", (e) => { if (e.key === "Enter" && $("#lobby") && !$("#lobby").classList.contains("gone")) enterLobby(); });
+
 /* init */
+document.body.classList.add("lobby-open");
+// Waveforms con barras aleatorias
+$$(".eq").forEach((eq) => {
+  if (eq.childElementCount) return;
+  eq.innerHTML = Array.from({ length: 22 }, () => "<i></i>").join("");
+  [...eq.children].forEach((b) => { b.style.animationDelay = (Math.random() * 0.7).toFixed(2) + "s"; });
+});
 $("#creditsNum").textContent = state.credits.toLocaleString("es");
-updateCount(); refreshKeyUI(); renderVoiceGrid(); renderLib(); renderHistory(); fillChangerVoices();
+renderLobby();
+updateCount(); refreshKeyUI(); renderVoiceGrid(); renderLib(); renderHistory(); fillChangerVoices(); updateEngineBadge();
