@@ -475,6 +475,17 @@ quiero = ¡Genial! Ya te atendemos por aquí 👇 ¿qué te apetece hoy?</textar
   </footer>
 </main>
 <a id="waFloat" href="#contacto" aria-label="Hablar por WhatsApp">💬</a>
+<!-- 🤖 BuzzBot: asistente flotante de la página -->
+<button id="botBtn" aria-label="Abrir asistente BuzzBot">🤖<span id="botDot" class="hidden">1</span></button>
+<div id="botPanel" class="hidden" role="dialog" aria-label="Asistente BuzzBot">
+  <div id="botHead"><span>🤖 <b>BuzzBot</b> <i>● en línea</i></span><button id="botClose" aria-label="Cerrar">✕</button></div>
+  <div id="botMsgs"></div>
+  <div id="botQuick"></div>
+  <div id="botBar">
+    <input id="botInput" placeholder="Escríbeme: precio, demo, ayuda..." maxlength="300" autocomplete="off" />
+    <button id="botSend" aria-label="Enviar">➤</button>
+  </div>
+</div>
 <div id="toast" class="toast"></div>
 <script src="app.js"></script>
 </body>

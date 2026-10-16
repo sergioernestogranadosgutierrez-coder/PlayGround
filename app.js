@@ -711,6 +711,92 @@ $("#btnContacto").addEventListener("click", async () => {
 });
 try { $("#footYear").textContent = new Date().getFullYear(); } catch {}
 
+// ---------- 🤖 BuzzBot flotante: ayuda, responde y convierte ----------
+const BOT_QUICKS = ["💰 Precios", "✨ Hacer mi campaña", "📢 Canal de WhatsApp", "💬 Hablar con humano"];
+function botHist() { return store.get("bz_bot_hist", []); }
+function botOpen() { $("#botPanel").classList.remove("hidden"); $("#botDot").classList.add("hidden"); }
+function botCloseFn() { $("#botPanel").classList.add("hidden"); }
+function botScroll() { const m = $("#botMsgs"); m.scrollTop = m.scrollHeight; }
+function botAdd(who, text) {
+  const d = document.createElement("div");
+  d.className = "bmsg " + who;
+  d.innerHTML = text;
+  $("#botMsgs").appendChild(d);
+  botScroll();
+  return d;
+}
+function botGoto(sel) { try { document.querySelector(sel)?.scrollIntoView({ behavior: "smooth" }); } catch {} }
+function botSave(q, a) {
+  try {
+    const h = botHist();
+    h.push({ q, a: String(a).replace(/<[^>]+>/g, "").slice(0, 300), ts: Date.now() });
+    store.set("bz_bot_hist", h.slice(-40));
+  } catch {}
+}
+function botAnswer(raw) {
+  const t = (raw || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const has = (...ws) => ws.some((w) => t.includes(w));
+  if (!t.trim()) return "Escríbeme qué necesitas: <b>precios</b>, <b>demo</b> o <b>ayuda</b> con tu campaña 🙂";
+  if (has("hola", "buenas", "hey", "que tal")) return "¡Hola! 👋 Soy <b>BuzzBot</b>. Te ayudo a publicar en todas tus redes en 2 minutos. ¿Quieres que <b>hagamos tu campaña ahora</b> o ver <b>precios</b>?";
+  if (has("precio", "plan", "costo", "cuanto", "pagar")) return "💰 <b>Planes:</b> Gratis ($0, 5 campañas/mes) · <b>Pro $9/mes</b> (ilimitado + auto + bot + canal) · Agencia $29/mes. 14 días gratis del Pro y garantía total. 👉 <a href='#planes'>Ver planes</a>";
+  if (has("gratis", "probar", "demo", "ejemplo")) return "✨ Puedo mostrarte: 1) cargo un <b>ejemplo</b> y genero tu pack, o 2) te llevo a <b>crear tu campaña</b>. ¿Qué prefieres? Escribe <b>ejemplo</b> o pulsa abajo.";
+  if (has("ejemplo")) { try { $("#btnDemo")?.click(); } catch {} botGoto("#crear"); return "✅ Cargué el ejemplo de <b>Tacos Lupita</b> 👇 Pulsa <b>Generar magia</b> y verás las 8 redes. <a href='#crear'>Ir a crear</a>"; }
+  if (has("campana", "publicar", "crear", "generar", "promo", "anuncio")) { botGoto("#crear"); return "🚀 Vamos: escribe tu <b>negocio + promo</b> en <a href='#crear'>Crear</a> y pulsa <b>Generar</b>. Yo adapto a 8 redes con hashtags y mejor hora. ¿Quieres que cargue un ejemplo primero?"; }
+  if (has("canal", "whatsapp")) { botGoto("#canal"); return "📢 El <b>Impulsor de Canal</b> crea 1 historia diaria + imagen 9:16 + promo para IG/YouTube. Ojo honesto: WhatsApp no deja publicar solo en Canales, así que te aviso y compartes con 1 toque. 👉 <a href='#canal'>Abrir impulsor</a>"; }
+  if (has("conectar", "cuenta", "oauth", "instagram", "tiktok", "api")) { botGoto("#conexiones"); return "🔌 Conectar es opcional para empezar (copias con 1 clic). Para automatizar del todo toca <b>Conectar</b> en cada red, toma 1 min. 👉 <a href='#conexiones'>Ir a cuentas</a>"; }
+  if (has("responde", "comentario", "mensaje", "bot", "inbox")) { botGoto("#responder"); return "🤖 El bot responde <b>precios, horarios y QUIERO</b> solo, modera spam e insultos y escala lo delicado a humano. Pruébalo en <a href='#responder'>Responder</a>."; }
+  if (has("medir", "analitica", "informe", "estadistica", "ventas", "funciona")) { botGoto("#medir"); return "📊 En <a href='#medir'>Medir</a> ves alcance por red, prueba A/B e informe que repite lo que más vende. Cada semana aprendemos solos."; }
+  if (has("humano", "asesor", "ventas", "contacto", "contratar", "hablar", "whatsapp humano", "ayuda personalizada")) { botGoto("#contacto"); return "💬 ¡Claro! Déjame tu <b>nombre + WhatsApp</b> en <a href='#contacto'>Contacto</a> y te hablamos hoy mismo. También tienes el botón verde flotante."; }
+  if (has("garantia", "reembolso", "devolucion", "seguro", "confiable", "datos", "privacidad")) return "🛡️ Tienes <b>14 días de garantía total</b> y tus datos quedan en tu navegador. Puedes exportar/borrar todo cuando quieras.";
+  if (has("horario", "hora", "cuando publicar", "mejor hora")) return "⏰ Publicamos en el pico de cada red: IG 18–21h, TikTok 19–22h, FB 13h y 19h, X 12h y 18h, LinkedIn 8–10h, YouTube 17–20h. La <b>cola inteligente</b> lo hace sola.";
+  if (has("gracias")) return "¡Con gusto! ❤️ Si quieres, seguimos con tu <a href='#crear'>primera campaña</a> o ves los <a href='#planes'>planes</a>.";
+  if (has("adios", "bye", "nos vemos")) return "¡Nos vemos! 👋 Aquí estaré cuando quieras vender más. ⚡";
+  // fallback útil: sugiere + ofrece generar
+  return `Buena pregunta 🙂 Puedo ayudarte con: <b>precios</b>, <b>hacer tu campaña</b>, <b>canal de WhatsApp</b>, <b>conectar redes</b> o <b>hablar con humano</b>.<br>¿Me dices cuál? Prueba: <i>"quiero hacer mi campaña de tacos 2x1"</i>`;
+}
+async function botSend(text) {
+  const q = (text ?? $("#botInput").value).trim();
+  if (!q) return;
+  $("#botInput").value = "";
+  botOpen();
+  botAdd("me", escapeHtml(q));
+  const typing = botAdd("bot", "<span class='typing'>Escribiendo…</span>");
+  await new Promise((r) => setTimeout(r, 450 + Math.min(900, q.length * 12)));
+  const a = botAnswer(q);
+  typing.innerHTML = a;
+  botScroll();
+  botSave(q, a);
+  try { audit("BuzzBot: " + q.slice(0, 60)); } catch {}
+}
+function botInit() {
+  const bq = $("#botQuick");
+  if (bq && !bq.children.length) BOT_QUICKS.forEach((t) => {
+    const b = document.createElement("button");
+    b.textContent = t;
+    b.addEventListener("click", () => botSend(t.replace(/^[^\s]+\s/, "")));
+    bq.appendChild(b);
+  });
+  $("#botBtn")?.addEventListener("click", () => { $("#botPanel").classList.contains("hidden") ? (botOpen(), botWelcome()) : botCloseFn(); });
+  $("#botClose")?.addEventListener("click", botCloseFn);
+  $("#botSend")?.addEventListener("click", () => botSend());
+  $("#botInput")?.addEventListener("keydown", (e) => { if (e.key === "Enter") botSend(); });
+  // saludo proactivo una sola vez
+  try {
+    if (!store.get("bz_bot_seen", null)) {
+      setTimeout(() => {
+        if ($("#botPanel").classList.contains("hidden")) $("#botDot").classList.remove("hidden");
+      }, 6000);
+    }
+  } catch {}
+}
+function botWelcome() {
+  if ($("#botMsgs").children.length) return;
+  const h = botHist();
+  botAdd("bot", "¡Hola! 👋 Soy <b>BuzzBot</b>, tu asistente de marketing.<br>✨ Hago tu campaña en 2 min · 📢 impulso tu canal · 💰 te explico precios.<br>¿Por dónde empezamos?");
+  if (h.length) botAdd("bot", `Veo que ya hablamos ${h.length} ${h.length === 1 ? "vez" : "veces"}. ¡Seguimos donde quieras! 🙂`);
+  store.set("bz_bot_seen", 1);
+}
+
 // ---------- init ----------
-function renderAll() { renderConns(); renderApr(); renderCal(); renderInbox(); drawChart(); renderAudit(); renderIdeas(); renderCnQueue(); renderCnStats(); renderLeads(); armTimers(); try { const k = $("#inAIKey"); if (k) k.value = localStorage.getItem("bz_ai_key") || ""; } catch {} const mj = store.get("bz_mej", []); if (mj.length) $("#mejorasList").innerHTML = mj.map((x) => `<li>🧠 ${escapeHtml(x)}</li>`).join(""); }
+function renderAll() { renderConns(); renderApr(); renderCal(); renderInbox(); drawChart(); renderAudit(); renderIdeas(); renderCnQueue(); renderCnStats(); renderLeads(); botInit(); armTimers(); try { const k = $("#inAIKey"); if (k) k.value = localStorage.getItem("bz_ai_key") || ""; } catch {} const mj = store.get("bz_mej", []); if (mj.length) $("#mejorasList").innerHTML = mj.map((x) => `<li>🧠 ${escapeHtml(x)}</li>`).join(""); }
 renderAll();
